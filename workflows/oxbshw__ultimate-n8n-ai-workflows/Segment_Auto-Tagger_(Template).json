@@ -1,0 +1,259 @@
+{
+  "name": "Segment Auto-Tagger (Template)",
+  "nodes": [
+    {
+      "id": "8899a18d-0442-5b25-8882-01bc2a4c42cf",
+      "name": "Score Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "customer-success-segment-auto-tagger-score",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "a6a67f42-680c-517f-80fd-8024f299cf0c",
+      "name": "Enrich From Source",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/customer-success-segment-auto-tagger/enrich",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "74499e03-da87-5a77-869c-3f21c385902a",
+      "name": "Score Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Score record for Segment Auto-Tagger.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "06e0eab4-4ff3-5e34-b4ce-3e5759d78086",
+      "name": "High Score",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"score\"]}}",
+              "operation": "largerEqual"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4bb381b2-8914-5d3a-9381-45a5e91e059c",
+      "name": "Update High Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/customer-success-segment-auto-tagger/route-high",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b852f88d-0ff9-567d-b1fd-3cf693481cae",
+      "name": "Update Low Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/customer-success-segment-auto-tagger/route-low",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5818d000-ccaf-512a-bdb5-1a516d857d4e",
+      "name": "Merge Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "50e06382-d5f9-5a06-b8e5-103c230c5e89",
+      "name": "Respond Done",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"scored\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Score Webhook": {
+      "main": [
+        [
+          {
+            "node": "Enrich From Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich From Source": {
+      "main": [
+        [
+          {
+            "node": "Score Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Record": {
+      "main": [
+        [
+          {
+            "node": "High Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Score": {
+      "main": [
+        [
+          {
+            "node": "Update High Path",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Low Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update High Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Low Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Paths": {
+      "main": [
+        [
+          {
+            "node": "Respond Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:customer-success"
+    },
+    {
+      "name": "pattern:webhook-enrich-score-branch"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "customer-success",
+    "templatePattern": "webhook-enrich-score-branch"
+  },
+  "versionId": "c00d7cfb-df75-524f-9538-186c398d80a7",
+  "id": "e0ba6e2c-fd22-5551-8786-610a0a3aa089"
+}

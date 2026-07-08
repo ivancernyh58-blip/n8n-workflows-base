@@ -1,0 +1,221 @@
+{
+  "name": "Request Form Processor (Template)",
+  "nodes": [
+    {
+      "id": "93b67836-fbf7-52a6-8577-69a1fbcb7125",
+      "name": "Action Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "project-management-request-form-processor-action",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "de1df61d-0403-5e1b-8455-82354da05e94",
+      "name": "Compute Idempotency Key",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Compute idempotency key for Request Form Processor.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "598d2526-dcf0-578d-985e-ff001bd38e9f",
+      "name": "Already Processed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"existing\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b6ec069a-f0fd-5cb4-9f6d-b82a7eaa836d",
+      "name": "Respond Duplicate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        900,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"duplicate\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "cab5bb9e-d933-56fc-adc1-4c28ae0deeb2",
+      "name": "Apply Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        900,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/project-management-request-form-processor/apply",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "ee362c12-ac14-5447-8240-6c161b55da5b",
+      "name": "Confirm Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/project-management-request-form-processor/confirm",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "320ce317-eb6a-5076-bb71-69535ef550c9",
+      "name": "Respond Applied",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        420
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"applied\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Action Webhook": {
+      "main": [
+        [
+          {
+            "node": "Compute Idempotency Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Idempotency Key": {
+      "main": [
+        [
+          {
+            "node": "Already Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Already Processed": {
+      "main": [
+        [
+          {
+            "node": "Respond Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apply Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Action": {
+      "main": [
+        [
+          {
+            "node": "Confirm Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Action": {
+      "main": [
+        [
+          {
+            "node": "Respond Applied",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:project-management"
+    },
+    {
+      "name": "pattern:webhook-idempotent-action"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "project-management",
+    "templatePattern": "webhook-idempotent-action"
+  },
+  "versionId": "b4e9eb2d-35ba-5fe8-b320-0d9e7c3f5310",
+  "id": "ddaf00f3-2020-57b8-9e16-39831c7d1fc3"
+}

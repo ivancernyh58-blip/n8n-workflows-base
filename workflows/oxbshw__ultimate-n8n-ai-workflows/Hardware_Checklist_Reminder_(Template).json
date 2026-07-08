@@ -1,0 +1,197 @@
+{
+  "name": "Hardware Checklist Reminder (Template)",
+  "nodes": [
+    {
+      "id": "104e348e-5211-5ee5-b202-68489a05157f",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "internal-tools-hardware-checklist-reminder-intake",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "18df36f7-4e91-5231-98ed-940657aa1c9d",
+      "name": "Normalize Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "input",
+              "value": "={{$json[\"body\"]}}"
+            },
+            {
+              "name": "source",
+              "value": "Hardware Checklist Reminder"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "fe38920c-e170-5321-a7cc-67e38b4986bc",
+      "name": "Validate Input",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"input\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5b6628b7-3a08-5a2a-91ae-3bbf593a66e6",
+      "name": "Forward To Service",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        900,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/internal-tools-hardware-checklist-reminder/forward",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a42f841b-87a9-5259-8d6b-7bb061147670",
+      "name": "Respond Success",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"accepted\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "f6d5cb51-1358-5a68-9ec0-538b7bf73c42",
+      "name": "Respond Invalid",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        900,
+        420
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"invalid\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Normalize Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Input": {
+      "main": [
+        [
+          {
+            "node": "Validate Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Input": {
+      "main": [
+        [
+          {
+            "node": "Forward To Service",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Invalid",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Forward To Service": {
+      "main": [
+        [
+          {
+            "node": "Respond Success",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:internal-tools"
+    },
+    {
+      "name": "pattern:webhook-intake-validate"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "internal-tools",
+    "templatePattern": "webhook-intake-validate"
+  },
+  "versionId": "75e31759-7a47-5148-a1ff-9bcb0d5ee00a",
+  "id": "06901d2d-40d8-572b-938c-5802f5eb1714"
+}

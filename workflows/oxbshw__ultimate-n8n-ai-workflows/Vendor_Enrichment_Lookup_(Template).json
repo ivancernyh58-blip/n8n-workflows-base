@@ -1,0 +1,188 @@
+{
+  "name": "Vendor Enrichment Lookup (Template)",
+  "nodes": [
+    {
+      "id": "e75c6f70-8eb3-5530-90fd-01d95fb2f814",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "73d6fe6b-0488-540a-b279-2246d308b0f0",
+      "name": "List Items",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/finance-admin-vendor-enrichment-lookup/list",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "c7a56a4f-d7d9-5f8e-8de4-0efa5cf26b3f",
+      "name": "Filter And Format",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Filter and format digest for Vendor Enrichment Lookup.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "41fc66f8-10b6-548c-b621-795c9c52162f",
+      "name": "Non Empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"items\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "89bd56f9-0541-515b-9e77-70154f40e58d",
+      "name": "Send Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/finance-admin-vendor-enrichment-lookup/send-digest",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a399b211-e397-5cb6-9701-3a09065e5830",
+      "name": "Nothing To Send",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "List Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Items": {
+      "main": [
+        [
+          {
+            "node": "Filter And Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter And Format": {
+      "main": [
+        [
+          {
+            "node": "Non Empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non Empty": {
+      "main": [
+        [
+          {
+            "node": "Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nothing To Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:finance-admin"
+    },
+    {
+      "name": "pattern:schedule-digest-format"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "finance-admin",
+    "templatePattern": "schedule-digest-format"
+  },
+  "versionId": "6fa0ec56-7b10-51ff-a167-c6f8dfd91fa9",
+  "id": "cb050a87-14ad-57db-9736-6062534ee156"
+}

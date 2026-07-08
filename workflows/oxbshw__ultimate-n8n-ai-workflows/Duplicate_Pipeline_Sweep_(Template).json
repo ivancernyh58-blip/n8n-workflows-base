@@ -1,0 +1,233 @@
+{
+  "name": "Duplicate Pipeline Sweep (Template)",
+  "nodes": [
+    {
+      "id": "23a5e557-a64f-5422-84e2-b6c6d744aac4",
+      "name": "Form Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "devops-duplicate-pipeline-sweep-form",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "7ce16c1a-41b0-504b-8d72-5338013bcfd4",
+      "name": "Normalize Form",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "source",
+              "value": "Duplicate Pipeline Sweep"
+            },
+            {
+              "name": "input",
+              "value": "={{$json[\"body\"]}}"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "a295144e-f9b5-5c1a-bf45-b04ad3b67761",
+      "name": "Required Fields",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"input\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "e3ef2f08-8569-5a6a-bb81-1d885e096078",
+      "name": "Create CRM Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        900,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/devops-duplicate-pipeline-sweep/crm-create",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "cc92bdb2-bb3c-50ea-8313-55167a2a90c0",
+      "name": "Notify Owner",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/devops-duplicate-pipeline-sweep/notify-owner",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "dae4f914-23c1-5591-a361-8496e5fc972a",
+      "name": "Respond OK",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"created\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "5ee620dd-1c81-539f-aaf9-5ab28fd8072e",
+      "name": "Respond Missing",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        900,
+        420
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"missing-fields\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Form Webhook": {
+      "main": [
+        [
+          {
+            "node": "Normalize Form",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Form": {
+      "main": [
+        [
+          {
+            "node": "Required Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Required Fields": {
+      "main": [
+        [
+          {
+            "node": "Create CRM Record",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond Missing",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create CRM Record": {
+      "main": [
+        [
+          {
+            "node": "Notify Owner",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify Owner": {
+      "main": [
+        [
+          {
+            "node": "Respond OK",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:devops"
+    },
+    {
+      "name": "pattern:webhook-form-crm-create"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "devops",
+    "templatePattern": "webhook-form-crm-create"
+  },
+  "versionId": "b2b12eea-06ea-5aa0-9a16-29a28bd1f9ca",
+  "id": "4091c707-9c73-538f-9ce2-53bee58f8329"
+}

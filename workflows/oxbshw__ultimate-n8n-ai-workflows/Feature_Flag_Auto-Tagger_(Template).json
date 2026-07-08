@@ -1,0 +1,259 @@
+{
+  "name": "Feature Flag Auto-Tagger (Template)",
+  "nodes": [
+    {
+      "id": "d25c9039-e919-5221-9fd7-e86cf44a8de6",
+      "name": "Score Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "saas-ops-feature-flag-auto-tagger-score",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "3a498343-34c9-5714-9c9a-2f168ac2c780",
+      "name": "Enrich From Source",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/saas-ops-feature-flag-auto-tagger/enrich",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "1770ecce-0682-54cf-ab1b-6f346e5ce9f8",
+      "name": "Score Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Score record for Feature Flag Auto-Tagger.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "a02aeab4-9440-5fb2-82af-638b7c9422d7",
+      "name": "High Score",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"score\"]}}",
+              "operation": "largerEqual"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "b4b55091-8776-5d85-857e-b741749689cb",
+      "name": "Update High Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/saas-ops-feature-flag-auto-tagger/route-high",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "afdc6df1-d9a8-5c43-bec0-f16b6b376b96",
+      "name": "Update Low Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/saas-ops-feature-flag-auto-tagger/route-low",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8470cf87-5cb6-5cbd-b7b3-ba64ed54a120",
+      "name": "Merge Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "ae283c10-b737-51e7-99b5-ae5132575c70",
+      "name": "Respond Done",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"scored\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Score Webhook": {
+      "main": [
+        [
+          {
+            "node": "Enrich From Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich From Source": {
+      "main": [
+        [
+          {
+            "node": "Score Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Record": {
+      "main": [
+        [
+          {
+            "node": "High Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Score": {
+      "main": [
+        [
+          {
+            "node": "Update High Path",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Low Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update High Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Low Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Paths": {
+      "main": [
+        [
+          {
+            "node": "Respond Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:saas-ops"
+    },
+    {
+      "name": "pattern:webhook-enrich-score-branch"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "saas-ops",
+    "templatePattern": "webhook-enrich-score-branch"
+  },
+  "versionId": "4bdd6d4a-f0b3-5c74-b3d2-b0eea0fb38d4",
+  "id": "757f1a9e-58ad-5ccd-a928-abbab8f0c504"
+}

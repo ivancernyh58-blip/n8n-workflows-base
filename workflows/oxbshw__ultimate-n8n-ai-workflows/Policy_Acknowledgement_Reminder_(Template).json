@@ -1,0 +1,188 @@
+{
+  "name": "Policy Acknowledgement Reminder (Template)",
+  "nodes": [
+    {
+      "id": "3851fd42-c0e4-5b02-b62b-bbac79b54bd6",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fd51aa72-029b-5396-8ae3-da9460a02e4e",
+      "name": "List Items",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/internal-tools-policy-acknowledgement-reminder/list",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "44bdcc78-9615-5204-9833-e89a0970cf6c",
+      "name": "Filter And Format",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Filter and format digest for Policy Acknowledgement Reminder.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "f7c4d28a-c8eb-5a09-861b-49850a8ab791",
+      "name": "Non Empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"items\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4caf39ef-4279-5aae-a45d-ee95eb59eff9",
+      "name": "Send Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/internal-tools-policy-acknowledgement-reminder/send-digest",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8f567c41-56fe-5716-aa76-e3f3d6e5e586",
+      "name": "Nothing To Send",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "List Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Items": {
+      "main": [
+        [
+          {
+            "node": "Filter And Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter And Format": {
+      "main": [
+        [
+          {
+            "node": "Non Empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non Empty": {
+      "main": [
+        [
+          {
+            "node": "Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nothing To Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:internal-tools"
+    },
+    {
+      "name": "pattern:schedule-digest-format"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "internal-tools",
+    "templatePattern": "schedule-digest-format"
+  },
+  "versionId": "39283316-d129-592a-a120-1f210a16083f",
+  "id": "3a2ba86c-d9f2-5151-ae69-dd096ed1e155"
+}

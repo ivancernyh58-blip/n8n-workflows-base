@@ -1,0 +1,221 @@
+{
+  "name": "Archived Post Cleanup (Template)",
+  "nodes": [
+    {
+      "id": "d9ab6bb0-f769-5010-bbaf-0e0ed049eca5",
+      "name": "Action Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "content-social-archived-post-cleanup-action",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "aaeb3a7e-f2fb-5461-817d-201f49ba771f",
+      "name": "Compute Idempotency Key",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Compute idempotency key for Archived Post Cleanup.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "a8f0e7b2-8e61-5888-92b1-7ca4b7516faf",
+      "name": "Already Processed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"existing\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "476e7254-d1db-55b1-8cab-16ae8e7f3763",
+      "name": "Respond Duplicate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        900,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"duplicate\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "a8295bff-985b-5a1d-bf0b-d9f957d10b18",
+      "name": "Apply Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        900,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/content-social-archived-post-cleanup/apply",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "c43cb129-5f12-55ec-a393-e3f863168141",
+      "name": "Confirm Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/content-social-archived-post-cleanup/confirm",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "657c999a-2f5e-5e7f-aaf1-a7022b002799",
+      "name": "Respond Applied",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        420
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"applied\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Action Webhook": {
+      "main": [
+        [
+          {
+            "node": "Compute Idempotency Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Idempotency Key": {
+      "main": [
+        [
+          {
+            "node": "Already Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Already Processed": {
+      "main": [
+        [
+          {
+            "node": "Respond Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apply Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Action": {
+      "main": [
+        [
+          {
+            "node": "Confirm Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Action": {
+      "main": [
+        [
+          {
+            "node": "Respond Applied",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:content-social"
+    },
+    {
+      "name": "pattern:webhook-idempotent-action"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "content-social",
+    "templatePattern": "webhook-idempotent-action"
+  },
+  "versionId": "476a75f8-b4b9-5c0b-acdb-d85cf55eb995",
+  "id": "76d69c82-9a94-581d-aee7-f9ca8381e5af"
+}

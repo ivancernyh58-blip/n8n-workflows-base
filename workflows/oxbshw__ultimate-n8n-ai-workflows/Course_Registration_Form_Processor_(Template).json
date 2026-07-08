@@ -1,0 +1,221 @@
+{
+  "name": "Course Registration Form Processor (Template)",
+  "nodes": [
+    {
+      "id": "a66069bb-48bc-515b-8d51-e06ce32db261",
+      "name": "Action Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "education-course-registration-form-processor-action",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "e9142191-6662-599f-9114-f9879542892c",
+      "name": "Compute Idempotency Key",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Compute idempotency key for Course Registration Form Processor.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "86e8ff44-9936-5b8e-a596-cc9169b8b92b",
+      "name": "Already Processed",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"existing\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4437881b-9489-5cbf-ac52-1d168addaa96",
+      "name": "Respond Duplicate",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        900,
+        200
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"duplicate\"}",
+        "options": {}
+      }
+    },
+    {
+      "id": "0d636629-9ea0-5c52-af0f-e7893eb836d3",
+      "name": "Apply Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        900,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/education-course-registration-form-processor/apply",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "9028e0fa-0d12-53da-9707-ff6ca10f7962",
+      "name": "Confirm Action",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/education-course-registration-form-processor/confirm",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "e8565093-bf6e-572b-87ea-e650f6793c5b",
+      "name": "Respond Applied",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        420
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"applied\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Action Webhook": {
+      "main": [
+        [
+          {
+            "node": "Compute Idempotency Key",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Compute Idempotency Key": {
+      "main": [
+        [
+          {
+            "node": "Already Processed",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Already Processed": {
+      "main": [
+        [
+          {
+            "node": "Respond Duplicate",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Apply Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Apply Action": {
+      "main": [
+        [
+          {
+            "node": "Confirm Action",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Confirm Action": {
+      "main": [
+        [
+          {
+            "node": "Respond Applied",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:education"
+    },
+    {
+      "name": "pattern:webhook-idempotent-action"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "education",
+    "templatePattern": "webhook-idempotent-action"
+  },
+  "versionId": "5409bc61-de7e-527b-9e6c-5c16c7ab52d0",
+  "id": "efdf7571-4336-5e1e-bb6e-e73c0e50e634"
+}

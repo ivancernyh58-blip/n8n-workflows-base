@@ -1,0 +1,189 @@
+{
+  "name": "Route Change Broadcast (Template)",
+  "nodes": [
+    {
+      "id": "f33308c8-0a73-5b2c-8d4a-df82cb03c86c",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "cf54bf84-31b6-5213-a3b8-a622c1861ead",
+      "name": "Sample Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "subject",
+              "value": "Route Change Broadcast"
+            },
+            {
+              "name": "ref",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "37a2bf52-acdb-525d-a73d-ca5cc5b8c554",
+      "name": "Lookup External",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/logistics-operations-route-change-broadcast/lookup",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "c0dcd971-10ba-5476-afed-1c8dadbe95d5",
+      "name": "Transform Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Transform lookup result for Route Change Broadcast.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "21304cd8-5717-5778-97d7-62feac859c4c",
+      "name": "Store Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/logistics-operations-route-change-broadcast/store",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "06553dde-104f-53a8-93bb-926ae88a9609",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Input": {
+      "main": [
+        [
+          {
+            "node": "Lookup External",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup External": {
+      "main": [
+        [
+          {
+            "node": "Transform Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Payload": {
+      "main": [
+        [
+          {
+            "node": "Store Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Record": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:logistics-operations"
+    },
+    {
+      "name": "pattern:manual-sample-transform-store"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "logistics-operations",
+    "templatePattern": "manual-sample-transform-store"
+  },
+  "versionId": "807c8a8b-476c-5e7c-805f-494c62b8dbcb",
+  "id": "79ffa19e-ecc0-54a5-8118-54e09d2e5180"
+}

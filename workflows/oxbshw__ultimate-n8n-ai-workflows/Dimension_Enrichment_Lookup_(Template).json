@@ -1,0 +1,188 @@
+{
+  "name": "Dimension Enrichment Lookup (Template)",
+  "nodes": [
+    {
+      "id": "bb75da1d-c3d4-5258-870b-05cf6c61775a",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "6681be76-6dfa-5425-b4fe-e98e906325ee",
+      "name": "List Items",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/data-engineering-dimension-enrichment-lookup/list",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "b81cfb98-12fd-5644-9233-db7a2592d14a",
+      "name": "Filter And Format",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Filter and format digest for Dimension Enrichment Lookup.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "43db1f43-5a3e-58e3-b769-1bdd34dc9d59",
+      "name": "Non Empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"items\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "6d5341bc-9e8f-59e4-b0b1-fc3076cbbd96",
+      "name": "Send Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/data-engineering-dimension-enrichment-lookup/send-digest",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "36ada560-7fa2-59c7-a0d6-1d57f64b3e26",
+      "name": "Nothing To Send",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "List Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Items": {
+      "main": [
+        [
+          {
+            "node": "Filter And Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter And Format": {
+      "main": [
+        [
+          {
+            "node": "Non Empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non Empty": {
+      "main": [
+        [
+          {
+            "node": "Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nothing To Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:data-engineering"
+    },
+    {
+      "name": "pattern:schedule-digest-format"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "data-engineering",
+    "templatePattern": "schedule-digest-format"
+  },
+  "versionId": "47a848b7-3457-5690-9b00-41b7d8a7fa06",
+  "id": "4c29da25-11fa-5ac9-b6f7-a83b31314704"
+}

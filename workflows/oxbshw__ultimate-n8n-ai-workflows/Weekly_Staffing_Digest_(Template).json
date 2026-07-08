@@ -1,0 +1,189 @@
+{
+  "name": "Weekly Staffing Digest (Template)",
+  "nodes": [
+    {
+      "id": "687240a2-6359-5c37-829c-4d3dc5d509e2",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "9efb6df3-b207-5ca7-814f-bb21dcee6050",
+      "name": "Sample Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "subject",
+              "value": "Weekly Staffing Digest"
+            },
+            {
+              "name": "ref",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "48c16f4f-637c-57b6-9306-5587b338b893",
+      "name": "Lookup External",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/homecare-admin-weekly-staffing-digest/lookup",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "2c7a3eac-2a81-5c1e-b9da-d98c89ba725f",
+      "name": "Transform Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Transform lookup result for Weekly Staffing Digest.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "a3bd51eb-33a9-58ce-9231-c3bec55b5563",
+      "name": "Store Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/homecare-admin-weekly-staffing-digest/store",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "2de0430d-9c0d-5301-a704-a67c4ce2968c",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Input": {
+      "main": [
+        [
+          {
+            "node": "Lookup External",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup External": {
+      "main": [
+        [
+          {
+            "node": "Transform Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Payload": {
+      "main": [
+        [
+          {
+            "node": "Store Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Record": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:homecare-admin"
+    },
+    {
+      "name": "pattern:manual-sample-transform-store"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "homecare-admin",
+    "templatePattern": "manual-sample-transform-store"
+  },
+  "versionId": "3c8b4776-1f1f-5e81-a94a-8faca1b1569b",
+  "id": "1cf66541-7735-5535-9e7e-69c7dece6eb5"
+}

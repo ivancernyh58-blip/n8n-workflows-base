@@ -1,0 +1,189 @@
+{
+  "name": "Weekly Usage Digest (Template)",
+  "nodes": [
+    {
+      "id": "0245102c-032f-5649-8636-797d39f321ee",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "8fc87bb4-e99a-52b1-8ae8-5d5dcb11a572",
+      "name": "Sample Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "subject",
+              "value": "Weekly Usage Digest"
+            },
+            {
+              "name": "ref",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "dd1f76a2-2721-5230-9d21-7cb21a75fd1f",
+      "name": "Lookup External",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/ai-agents-weekly-usage-digest/lookup",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "27ed28df-19dd-5dc3-93e6-53b1dee8106d",
+      "name": "Transform Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Transform lookup result for Weekly Usage Digest.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "45b2c828-1f98-5714-8061-6e3249734e00",
+      "name": "Store Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/ai-agents-weekly-usage-digest/store",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "0cdb1f4a-663a-573b-b518-2c0d75d670ef",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Input": {
+      "main": [
+        [
+          {
+            "node": "Lookup External",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup External": {
+      "main": [
+        [
+          {
+            "node": "Transform Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Payload": {
+      "main": [
+        [
+          {
+            "node": "Store Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Record": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:ai-agents"
+    },
+    {
+      "name": "pattern:manual-sample-transform-store"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "ai-agents",
+    "templatePattern": "manual-sample-transform-store"
+  },
+  "versionId": "6633de00-70ec-5a98-9c86-b0451557ddaf",
+  "id": "7130f02f-57f6-52fa-8afe-3dfa592a20ab"
+}

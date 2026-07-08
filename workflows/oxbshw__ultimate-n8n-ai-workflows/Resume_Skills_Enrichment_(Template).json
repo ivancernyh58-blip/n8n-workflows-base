@@ -1,0 +1,188 @@
+{
+  "name": "Resume Skills Enrichment (Template)",
+  "nodes": [
+    {
+      "id": "ab64eec0-21fb-5921-9e97-1069a2cf454a",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "39ab2ba7-7999-55dd-94e1-0bafb68fd4fc",
+      "name": "List Items",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/hr-recruiting-resume-skills-enrichment/list",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "1c722e04-3a36-5bed-aaed-dc07030d28ce",
+      "name": "Filter And Format",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Filter and format digest for Resume Skills Enrichment.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "5c9d5c7b-eadd-567c-8ad8-20e89d0929df",
+      "name": "Non Empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"items\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "fc0182b9-4913-561c-8199-12b1964ba36e",
+      "name": "Send Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/hr-recruiting-resume-skills-enrichment/send-digest",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "eb14bfe0-be0b-5e4c-b75d-cddbc9487a21",
+      "name": "Nothing To Send",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "List Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Items": {
+      "main": [
+        [
+          {
+            "node": "Filter And Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter And Format": {
+      "main": [
+        [
+          {
+            "node": "Non Empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non Empty": {
+      "main": [
+        [
+          {
+            "node": "Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nothing To Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:hr-recruiting"
+    },
+    {
+      "name": "pattern:schedule-digest-format"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "hr-recruiting",
+    "templatePattern": "schedule-digest-format"
+  },
+  "versionId": "c1d79e4f-6e93-5e82-9592-250db01cb179",
+  "id": "ebee967f-67b3-53e7-a3b9-29f0d0371d9a"
+}

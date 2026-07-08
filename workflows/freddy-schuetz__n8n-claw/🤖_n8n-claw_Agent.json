@@ -1,0 +1,2027 @@
+{
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner",
+    "availableInMCP": false
+  },
+  "name": "🤖 n8n-claw Agent",
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "Route Media Type",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Route Media Type": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Voice File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Photo File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get Doc File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Format Location",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Unsupported Media",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Voice File": {
+      "main": [
+        [
+          {
+            "node": "Transcribe Voice",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transcribe Voice": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Photo File": {
+      "main": [
+        [
+          {
+            "node": "Analyze Photo",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload to File Bridge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Analyze Photo": {
+      "main": [
+        [
+          {
+            "node": "Merge File Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get Doc File": {
+      "main": [
+        [
+          {
+            "node": "Extract PDF Text",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Upload to File Bridge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extract PDF Text": {
+      "main": [
+        [
+          {
+            "node": "Merge File Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Location": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Unsupported Media": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Normalize Message": {
+      "main": [
+        [
+          {
+            "node": "Merge Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Task Input": {
+      "main": [
+        [
+          {
+            "node": "Merge Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Scheduled Task Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format Task Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge Input": {
+      "main": [
+        [
+          {
+            "node": "Load Soul",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Soul": {
+      "main": [
+        [
+          {
+            "node": "Load Agents Config",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Load Agents Config": {
+      "main": [
+        [
+          {
+            "node": "Load User Profile",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Load User Profile": {
+      "main": [
+        [
+          {
+            "node": "Load Conversation History",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Load Conversation History": {
+      "main": [
+        [
+          {
+            "node": "Load MCP Servers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Load MCP Servers": {
+      "main": [
+        [
+          {
+            "node": "Load Active Projects",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Load Active Projects": {
+      "main": [
+        [
+          {
+            "node": "Load Insights",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Build System Prompt": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Save Conversation and Log",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Claude": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Memory Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory Save": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory Delete": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Memory Update": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Entity Manager": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Tool": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web Search": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Web Reader": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Self Modify": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Format Webhook Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Webhook Input": {
+      "main": [
+        [
+          {
+            "node": "Merge Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save Conversation and Log": {
+      "main": [
+        [
+          {
+            "node": "Response Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    },
+    "Response Router": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Detect File Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Split Long Message": {
+      "main": [
+        [
+          {
+            "node": "Telegram Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Reminder": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "WorkflowBuilder": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Builder": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MCP Client": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Task Manager": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Library Manager": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Project Manager": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Expert Agent": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Agent Library": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Browser Action": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Status": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload to File Bridge": {
+      "main": [
+        [
+          {
+            "node": "Save File Metadata",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Detect File Send": {
+      "main": [
+        [
+          {
+            "node": "File Router",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "File Router": {
+      "main": [
+        [
+          {
+            "node": "Download File",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Split Long Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Download File": {
+      "main": [
+        [
+          {
+            "node": "Send File to Telegram",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send File to Telegram": {
+      "main": [
+        [
+          {
+            "node": "Split Long Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Save File Metadata": {
+      "main": [
+        [
+          {
+            "node": "Merge File Paths",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge File Paths": {
+      "main": [
+        [
+          {
+            "node": "Normalize Message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Load Insights": {
+      "main": [
+        [
+          {
+            "node": "Build System Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ],
+      "ai_tool": [
+        []
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "id": "telegram-trigger",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        -16
+      ],
+      "webhookId": "n8n-claw-telegram",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "outputKey": "text",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "string",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.text }}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true
+            },
+            {
+              "outputKey": "voice",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.voice }}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true
+            },
+            {
+              "outputKey": "photo",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "array",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.photo }}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true
+            },
+            {
+              "outputKey": "document",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.document }}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true
+            },
+            {
+              "outputKey": "location",
+              "conditions": {
+                "options": {
+                  "version": 2,
+                  "leftValue": "",
+                  "caseSensitive": true,
+                  "typeValidation": "loose"
+                },
+                "combinator": "and",
+                "conditions": [
+                  {
+                    "operator": {
+                      "type": "object",
+                      "operation": "exists",
+                      "singleValue": true
+                    },
+                    "leftValue": "={{ $json.message.location }}",
+                    "rightValue": ""
+                  }
+                ]
+              },
+              "renameOutput": true
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra",
+          "looseTypeValidation": true
+        }
+      },
+      "id": "route-media-type",
+      "name": "Route Media Type",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        240,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').first().json.message.voice.file_id }}"
+      },
+      "id": "get-voice-file",
+      "name": "Get Voice File",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        -350
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "audio",
+        "operation": "transcribe",
+        "options": {}
+      },
+      "id": "transcribe-voice",
+      "name": "Transcribe Voice",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        700,
+        -350
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').first().json.message.photo.pop().file_id }}"
+      },
+      "id": "get-photo-file",
+      "name": "Get Photo File",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        -150
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "image",
+        "operation": "analyze",
+        "modelId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "gpt-4o-mini",
+          "cachedResultName": "GPT-4O-MINI"
+        },
+        "text": "={{ $('Telegram Trigger').first().json.message.caption || 'Describe this image in detail.' }}",
+        "inputType": "base64",
+        "binaryPropertyName": "data",
+        "options": {
+          "maxTokens": 1000,
+          "detail": "auto"
+        }
+      },
+      "id": "analyze-photo",
+      "name": "Analyze Photo",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 2.1,
+      "position": [
+        700,
+        -150
+      ],
+      "credentials": {
+        "openAiApi": {
+          "id": "REPLACE_WITH_YOUR_OPENAI_CREDENTIAL_ID",
+          "name": "OpenAI API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "file",
+        "fileId": "={{ $('Telegram Trigger').first().json.message.document.file_id }}"
+      },
+      "id": "get-doc-file",
+      "name": "Get Doc File",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        480,
+        50
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "pdf",
+        "binaryPropertyName": "data",
+        "options": {
+          "joinPages": true
+        }
+      },
+      "id": "extract-pdf-text",
+      "name": "Extract PDF Text",
+      "type": "n8n-nodes-base.extractFromFile",
+      "typeVersion": 1.1,
+      "position": [
+        700,
+        50
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const msg = $('Telegram Trigger').first().json.message;\nconst loc = msg.location;\nreturn [{\n  json: {\n    userMessage: `I'm sharing my location: ${loc.latitude}, ${loc.longitude}\\n\\nUse the HTTP Tool to resolve the address via https://nominatim.openstreetmap.org/reverse?lat=${loc.latitude}&lon=${loc.longitude}&format=json&accept-language=de`\n  }\n}];"
+      },
+      "id": "format-location",
+      "name": "Format Location",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        250
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "return [{\n  json: {\n    userMessage: 'I sent a media type that is not yet supported (sticker, video, etc).'\n  }\n}];"
+      },
+      "id": "unsupported-media",
+      "name": "Unsupported Media",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        400
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const msg = $('Telegram Trigger').first().json.message;\nconst chatId = String(msg.chat.id);\nconst userId = String(msg.from.id);\nconst source = 'telegram';\nconst sessionId = 'telegram:' + chatId;\nconst qualifiedUserId = 'telegram:' + userId;\n\nfunction out(userMessage) {\n  return [{ json: { userMessage, chatId, userId, sessionId, qualifiedUserId, source } }];\n}\n\nlet userMessage = '';\n\n// Check voice transcription result\ntry {\n  const transcript = $('Transcribe Voice').first()?.json?.text;\n  if (transcript) {\n    return out('[Voice message] ' + transcript);\n  }\n} catch(e) {}\n\n// Try to get file_ref from File Bridge upload\nlet fileRef = '';\ntry { fileRef = $('Save File Metadata').first()?.json?.file_ref || ''; } catch(e) {}\n\n// Check photo (analyzed by OpenAI Vision)\ntry {\n  const analysis = $('Analyze Photo').first();\n  if (analysis) {\n    let description = '';\n    const j = analysis.json;\n    if (Array.isArray(j)) {\n      description = j[0]?.content?.[0]?.text || JSON.stringify(j);\n    } else {\n      description = j.text || j.content || JSON.stringify(j);\n    }\n    const caption = msg.caption || '';\n    const refTag = fileRef ? ' | file_ref: ' + fileRef : '';\n    userMessage = '[Photo' + refTag + ']\\n' + description + (caption ? '\\n\\nUser caption: ' + caption : '');\n    return out(userMessage);\n  }\n} catch(e) {}\n\n// Check document (PDF text extracted by Extract PDF Text node)\ntry {\n  const extracted = $('Extract PDF Text').first();\n  if (extracted) {\n    const filename = msg.document?.file_name || 'unknown';\n    const pdfText = extracted.json.text || '';\n    const refTag = fileRef ? ' | file_ref: ' + fileRef : '';\n    userMessage = '[Document: ' + filename + refTag + ']\\n\\n' + pdfText + '\\n\\n' + (msg.caption || 'Please analyze this document.');\n    return out(userMessage);\n  }\n} catch(e) {}\n\n// Check location\ntry {\n  const locMsg = $('Format Location').first()?.json?.userMessage;\n  if (locMsg) {\n    return out(locMsg);\n  }\n} catch(e) {}\n\n// Check unsupported\ntry {\n  const unsup = $('Unsupported Media').first()?.json?.userMessage;\n  if (unsup) {\n    return out(unsup);\n  }\n} catch(e) {}\n\n// Default: text message\nuserMessage = msg.text || '';\nreturn out(userMessage);"
+      },
+      "id": "normalize-message",
+      "name": "Normalize Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "inputSource": "passthrough"
+      },
+      "id": "scheduled-task-trigger",
+      "name": "Scheduled Task Trigger",
+      "type": "n8n-nodes-base.executeWorkflowTrigger",
+      "typeVersion": 1.1,
+      "position": [
+        0,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const raw = $input.first().json;\nconst message = raw.message || '';\nconst chatId = String(raw.chat_id || '');\n// Strip 'telegram:' prefix if present to get raw numeric ID\nconst userId = String(raw.user_id || '').replace('telegram:', '');\nconst source = raw.source || 'scheduled_task';\nconst sessionId = 'telegram:' + chatId;\nconst qualifiedUserId = 'telegram:' + userId;\n\nreturn [{ json: { userMessage: message, chatId, userId, sessionId, qualifiedUserId, source } }];"
+      },
+      "id": "format-task-input",
+      "name": "Format Task Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "const data = $input.first().json;\nreturn [{ json: data }];"
+      },
+      "id": "merge-input",
+      "name": "Merge Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1060,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT key, content FROM soul ORDER BY key",
+        "options": {
+          "queryBatching": "independently"
+        }
+      },
+      "id": "load-soul",
+      "name": "Load Soul",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [
+        1200,
+        -16
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT key, content FROM claw_agents WHERE key NOT LIKE 'persona:%' ORDER BY key",
+        "options": {
+          "queryBatching": "independently"
+        }
+      },
+      "id": "load-agents",
+      "name": "Load Agents Config",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "executeOnce": true,
+      "position": [
+        1424,
+        -16
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT name, display_name, timezone, preferences, context, setup_done FROM user_profiles WHERE user_id = '{{ $('Merge Input').first().json.qualifiedUserId }}' LIMIT 1",
+        "options": {
+          "queryBatching": "independently"
+        }
+      },
+      "id": "load-user",
+      "name": "Load User Profile",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "executeOnce": true,
+      "position": [
+        1648,
+        -16
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT role, content FROM conversations WHERE session_id = '{{ $('Merge Input').first().json.sessionId }}' ORDER BY created_at DESC LIMIT 20",
+        "options": {
+          "queryBatching": "independently"
+        }
+      },
+      "id": "load-history",
+      "name": "Load Conversation History",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "executeOnce": true,
+      "position": [
+        1872,
+        -16
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT server_name, path, mcp_url, description, tools FROM mcp_registry WHERE active = true ORDER BY server_name",
+        "options": {
+          "queryBatching": "independently"
+        }
+      },
+      "id": "load-mcp-servers",
+      "name": "Load MCP Servers",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "executeOnce": true,
+      "position": [
+        1984,
+        -16
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "jsCode": "// Build system prompt from loaded context\nconst soul = $('Load Soul').all().map(i => i.json);\n// Deduplicate: sequential node chaining causes cartesian product (6 soul × 6 agents = 36 items)\nconst agentsRaw = $('Load Agents Config').all().map(i => i.json);\nconst agents = [...new Map(agentsRaw.map(a => [a.key, a])).values()];\nconst user = $('Load User Profile').first()?.json || {};\n// Deduplicate conversation history (36x duplicated due to upstream cartesian product)\nconst historyRaw = $('Load Conversation History').all().map(i => i.json);\nconst seenHist = new Set();\nconst history = historyRaw.filter(h => { const k = h.role + ':' + h.content; if (seenHist.has(k)) return false; seenHist.add(k); return true; });\nconst mergeData = $('Merge Input').first().json;\nconst userMessage = mergeData.userMessage || '';\nconst chatId = mergeData.chatId;\nconst userId = mergeData.userId;\nconst inputSource = mergeData.source || 'telegram';\n\n// Build dynamic MCP server list from mcp_registry\nconst mcpRaw = $('Load MCP Servers').all().map(i => i.json);\nconst seenMcp = new Set();\nconst mcpServers = mcpRaw.filter(s => { if (!s.server_name || seenMcp.has(s.server_name)) return false; seenMcp.add(s.server_name); return true; });\nlet mcpServerList = '';\nif (mcpServers.length > 0) {\n  mcpServerList = '\\n\\n## Available MCP Skills:\\n' + mcpServers.map(s => {\n    const tools = Array.isArray(s.tools) ? s.tools.join(', ') : s.tools;\n    return `- ${s.server_name}: ${s.mcp_url} (tools: ${tools})${s.description ? ' — ' + s.description : ''}`;\n  }).join('\\n');\n}\n\n// Inject dynamic server list into mcp_instructions (replace any static server section)\nconst agentText = agents.map(a => {\n  if (a.key === 'mcp_instructions') {\n    const cleaned = a.content.replace(/\\n## (?:Available MCP (?:Servers|Skills)|Currently installed MCP Skills)[\\s\\S]*?(?=\\n## |$)/, '');\n    return `## ${a.key}\\n${cleaned}${mcpServerList}`;\n  }\n  return `## ${a.key}\\n${a.content}`;\n}).join('\\n\\n');\n\n// Build soul text\nconst soulText = soul.map(s => `## ${s.key}\\n${s.content}`).join('\\n\\n');\nconst userText = user.display_name\n  ? `Name: ${user.display_name} (${user.name})\\nTimezone: ${user.timezone}\\nKontext: ${user.context}\\nPrefs: ${JSON.stringify(user.preferences)}\\nSetup done: ${user.setup_done !== false ? 'true' : 'false'}`\n  : 'Unbekannter User';\n\n// Build conversation history\nconst historyText = history.reverse().map(h => `${h.role}: ${h.content}`).join('\\n');\n\n// Current date/time in user's timezone\nconst now = $now.setZone(user.timezone || 'UTC').toFormat('cccc, dd LLLL yyyy, HH:mm');\n\nconst scheduledHint = inputSource === 'scheduled_task' ? '\\n\\n# SCHEDULED TASK\\nThis message is a scheduled task that the user set up earlier. Execute the instructions thoroughly and send the result. Start your response with a brief ⏰ note that this is a scheduled task result.' : '';\n\n// Build active projects list (names only — content loaded on demand via Project Manager tool)\nconst projectsRaw = $('Load Active Projects').all().map(i => i.json);\nconst seenProj = new Set();\nconst activeProjects = projectsRaw.filter(p => { if (!p.name || seenProj.has(p.name)) return false; seenProj.add(p.name); return true; });\nlet projectsSection = '';\nif (activeProjects.length > 0) {\n  projectsSection = '\\n\\n# ACTIVE PROJECTS\\n' + activeProjects.map(p => {\n    const d = p.updated_at ? new Date(p.updated_at).toISOString().split('T')[0] : '';\n    return `- ${p.name} (updated: ${d})`;\n  }).join('\\n') + '\\nUse the Project Manager tool to read or update project details.';\n}\n\n// Insights — derived from nightly memory consolidation pattern extraction (n8n-claw v1.4 Hermes-Memory)\n// Top-3 by importance, non-outdated. Empty section omitted entirely if no insights yet.\nconst insightsRaw = $('Load Insights').all().map(i => i.json);\nconst seenIns = new Set();\nconst insights = insightsRaw.filter(i => { if (!i || !i.content || seenIns.has(i.id)) return false; seenIns.add(i.id); return true; });\nlet insightsSection = '';\nif (insights.length > 0) {\n  insightsSection = '\\n\\n# WHAT YOU KNOW ABOUT THE USER (INSIGHTS)\\nThese behavioral patterns were extracted from past conversations during nightly consolidation. Use them as context to shape your responses, but do NOT explicitly cite them (\"I noticed you tend to...\"). Let them inform your tone, pacing, and suggestions silently.\\n' + insights.map(i => `- ${i.content}`).join('\\n');\n}\n\nconst systemPrompt = `# CURRENT TIME\\n${now}\\n\\n# SOUL\\n${soulText}\\n\\n# AGENT CONFIG\\n${agentText}\\n\\n# USER PROFILE\\n${userText}${insightsSection}${scheduledHint}${projectsSection}\\n\\n# RECENT CONVERSATION\\n${historyText}`;\n\nreturn [{\n  json: {\n    systemPrompt,\n    userMessage,\n    chatId: String(chatId),\n    userId: String(userId),\n    sessionId: mergeData.sessionId || `telegram:${chatId}`,\n    qualifiedUserId: mergeData.qualifiedUserId || `telegram:${userId}`,\n    source: inputSource,\n    _webhookSource: mergeData._webhookSource || false,\n    metadata: mergeData.metadata || {}\n  }\n}];"
+      },
+      "id": "build-prompt",
+      "name": "Build System Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2320,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.userMessage }}",
+        "options": {
+          "systemMessage": "={{ $json.systemPrompt }}",
+          "maxIterations": 10
+        }
+      },
+      "id": "ai-agent",
+      "name": "AI Agent",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        2832,
+        -16
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 5000
+    },
+    {
+      "parameters": {
+        "model": {
+          "__rl": true,
+          "value": "claude-sonnet-4-6",
+          "mode": "list",
+          "cachedResultName": "Claude Sonnet 4.6"
+        },
+        "options": {
+          "maxTokensToSample": 8192,
+          "temperature": 0.7
+        }
+      },
+      "id": "claude-llm",
+      "name": "Claude",
+      "type": "@n8n/n8n-nodes-langchain.lmChatAnthropic",
+      "typeVersion": 1.3,
+      "position": [
+        2320,
+        208
+      ],
+      "credentials": {
+        "anthropicApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Anthropic API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Save conversation + daily log via PostgREST (avoids pg-promise $N escaping bug)\nconst bsp = $('Build System Prompt').first().json;\nconst userMessage = bsp.userMessage;\nconst assistantMessage = $('AI Agent').first().json.output;\nconst sessionId = bsp.sessionId;\nconst userId = bsp.userId;\nconst qualifiedUserId = bsp.qualifiedUserId;\nconst source = bsp.source || 'telegram';\nconst _webhookSource = bsp._webhookSource || false;\nconst metadata = bsp.metadata || {};\n\n// Suppress heartbeat proactive-reminder skips: if the agent decided all open loops are trivial,\n// it returns the literal '[SKIP]' marker. Drop the response entirely — no save, no notify.\nif (typeof assistantMessage === 'string' && assistantMessage.trim() === '[SKIP]') {\n  return [];\n}\n\nconst SUPABASE_URL = '{{SUPABASE_URL}}';\nconst SUPABASE_KEY = '{{SUPABASE_SERVICE_KEY}}';\nconst headers = { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };\n\n// Save user + assistant messages\nawait helpers.httpRequest({ method: 'POST', url: `${SUPABASE_URL}/rest/v1/conversations`, headers, body: JSON.stringify({ session_id: sessionId, user_id: userId, role: 'user', content: userMessage }) });\nawait helpers.httpRequest({ method: 'POST', url: `${SUPABASE_URL}/rest/v1/conversations`, headers, body: JSON.stringify({ session_id: sessionId, user_id: userId, role: 'assistant', content: assistantMessage }) });\n\n// Save daily log\nawait helpers.httpRequest({ method: 'POST', url: `${SUPABASE_URL}/rest/v1/memory_daily`, headers, body: JSON.stringify({ date: new Date().toISOString().split('T')[0], content: userMessage + ' → ' + assistantMessage, role: 'interaction', user_id: userId }) });\n\n// Mark onboarding done if needed\nconst setupDone = $('Load User Profile').first()?.json?.setup_done;\nif (setupDone === false) {\n  await helpers.httpRequest({ method: 'PATCH', url: `${SUPABASE_URL}/rest/v1/user_profiles?user_id=eq.${encodeURIComponent(qualifiedUserId)}`, headers, body: JSON.stringify({ setup_done: true }) });\n}\n\nreturn [{ json: { saved: true, sessionId, _webhookSource, metadata } }];"
+      },
+      "id": "prepare-save",
+      "name": "Save Conversation and Log",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3680,
+        -16
+      ]
+    },
+    {
+      "id": "split-long-message",
+      "name": "Split Long Message",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        3712,
+        -16
+      ],
+      "parameters": {
+        "jsCode": "let text = $('AI Agent').first().json.output || '';\n\n// Strip [send_file: URL] markers (handled by file delivery pipeline)\ntext = text.replace(/\\[send_file:\\s*https?:\\/\\/[^\\]]+\\]/g, '').trim();\n\nconst MAX = 4000;\n\nfunction sanitizeTelegramMarkdown(t) {\n  const codeBlockCount = (t.match(/```/g) || []).length;\n  if (codeBlockCount % 2 !== 0) t += '\\n```';\n  const boldCount = (t.match(/\\*\\*/g) || []).length;\n  if (boldCount % 2 !== 0) {\n    const lastIdx = t.lastIndexOf('**');\n    t = t.substring(0, lastIdx) + t.substring(lastIdx + 2);\n  }\n  let singleStarPositions = [];\n  for (let i = 0; i < t.length; i++) {\n    if (t[i] === '*' && (i === 0 || t[i-1] !== '*') && (i === t.length-1 || t[i+1] !== '*')) singleStarPositions.push(i);\n  }\n  if (singleStarPositions.length % 2 !== 0 && singleStarPositions.length > 0) {\n    const removeIdx = singleStarPositions[singleStarPositions.length - 1];\n    t = t.substring(0, removeIdx) + t.substring(removeIdx + 1);\n  }\n  let underscorePositions = [];\n  for (let i = 0; i < t.length; i++) {\n    if (t[i] === '_') {\n      const context = t.substring(Math.max(0, i - 50), i);\n      if (!context.match(/https?:\\/\\/[^\\s]*$/)) underscorePositions.push(i);\n    }\n  }\n  if (underscorePositions.length % 2 !== 0 && underscorePositions.length > 0) {\n    const removeIdx = underscorePositions[underscorePositions.length - 1];\n    t = t.substring(0, removeIdx) + t.substring(removeIdx + 1);\n  }\n  let backtickPositions = [];\n  for (let i = 0; i < t.length; i++) {\n    if (t[i] === '`' && (i === 0 || t[i-1] !== '`') && (i === t.length-1 || t[i+1] !== '`')) backtickPositions.push(i);\n  }\n  if (backtickPositions.length % 2 !== 0 && backtickPositions.length > 0) {\n    const removeIdx = backtickPositions[backtickPositions.length - 1];\n    t = t.substring(0, removeIdx) + t.substring(removeIdx + 1);\n  }\n  return t;\n}\n\nif (text.length <= MAX) {\n  return [{ json: { text: sanitizeTelegramMarkdown(text) } }];\n}\n\nconst chunks = [];\nlet remaining = text;\n\nwhile (remaining.length > MAX) {\n  let cutPoint = remaining.lastIndexOf('\\n\\n', MAX);\n  if (cutPoint < MAX * 0.3) cutPoint = remaining.lastIndexOf('\\n', MAX);\n  if (cutPoint < MAX * 0.3) cutPoint = remaining.lastIndexOf(' ', MAX);\n  if (cutPoint < MAX * 0.3) cutPoint = MAX;\n  chunks.push(remaining.substring(0, cutPoint).trim());\n  remaining = remaining.substring(cutPoint).trim();\n}\nif (remaining) chunks.push(remaining);\n\nreturn chunks.map(c => ({ json: { text: sanitizeTelegramMarkdown(c) } }));"
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Build System Prompt').first().json.chatId }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false,
+          "parse_mode": "Markdown"
+        }
+      },
+      "id": "telegram-reply",
+      "name": "Telegram Reply",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        3904,
+        -16
+      ],
+      "webhookId": "9fd4b04d-2f65-4443-b507-51506f758a95",
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "description": "Search long-term memory. Input: search query string OR JSON with optional filters.\nSimple: \"Berlin restaurants\" — semantic search.\nFiltered: {\"query\": \"restaurants\", \"entity\": \"Berlin\", \"tags\": [\"food\"]}\nReturns: id, content, category, importance, similarity, tags, entity_name, source.\nUse the returned id for memory_update or memory_delete.",
+        "jsCode": "// Load embedding config from DB and generate embedding\nasync function getEmbedding(text) {\n  const cfgResp = await helpers.httpRequest({ method: 'GET', url: '{{SUPABASE_URL}}/rest/v1/tools_config?tool_name=eq.embedding&select=config,enabled', headers: { 'apikey': '{{SUPABASE_SERVICE_KEY}}', 'Content-Type': 'application/json' } });\n  const cfg = (Array.isArray(cfgResp) && cfgResp.length > 0 && cfgResp[0].enabled) ? cfgResp[0].config : null;\n  if (!cfg || !cfg.api_key) return null;\n  const provider = cfg.provider || 'openai';\n  const apiKey = cfg.api_key;\n  const model = cfg.model || 'text-embedding-3-small';\n  try {\n    if (provider === 'openai') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.openai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model, input: text }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'voyage') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.voyageai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'voyage-3-lite', input: [text] }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'ollama') {\n      const ollamaUrl = cfg.ollama_url || 'http://localhost:11434';\n      const res = await helpers.httpRequest({ method: 'POST', url: `${ollamaUrl}/api/embed`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'nomic-embed-text', input: text }) });\n      return res.embeddings[0];\n    }\n  } catch(e) { return null; }\n  return null;\n}\n\nlet input;\ntry { input = JSON.parse(query); } catch(e) { input = {search_query: query}; }\nconst searchQuery = input.search_query || input.query || query;\nconst filterEntity = input.entity || null;\nconst filterTags = (input.tags && Array.isArray(input.tags)) ? input.tags.map(t => t.toLowerCase()) : null;\nconst embedding = await getEmbedding(searchQuery);\n\nconst body = { query_text: searchQuery, match_count: 5 };\nif (embedding) body.query_embedding = JSON.stringify(embedding);\nif (input.category) body.filter_category = input.category;\nif (filterEntity) body.filter_entity = filterEntity;\nif (filterTags) body.filter_tags = filterTags;\nconst result = await helpers.httpRequest({\n  method: 'POST',\n  url: '{{SUPABASE_URL}}/rest/v1/rpc/hybrid_search_memory',\n  headers: { 'apikey': '{{SUPABASE_SERVICE_KEY}}', 'Content-Type': 'application/json' },\n  body: JSON.stringify(body)\n});\nreturn JSON.stringify(result);"
+      },
+      "id": "tool-memory-search",
+      "name": "Memory Search",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2448,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Save important info to long-term memory. Input: JSON with content (string), category (general/decision/preference/contact/project), importance (1-10), tags (string array — ALWAYS 2-5 English lowercase keywords, NEVER German), entity_name (string — set for any named entity: person, company, place, project, product, technology, event, etc. — omit only when no named entity is involved). Optional: source (conversation/user_stated/task_result). Auto-expiry: contact/preference/decision and importance>=9 never expire. Others expire after 90 days (consolidated/low importance) or 180 days. Use high importance (9-10) for facts that must persist indefinitely.",
+        "jsCode": "// Load embedding config from DB and generate embedding\nasync function getEmbedding(text) {\n  const cfgResp = await helpers.httpRequest({ method: 'GET', url: '{{SUPABASE_URL}}/rest/v1/tools_config?tool_name=eq.embedding&select=config,enabled', headers: { 'apikey': '{{SUPABASE_SERVICE_KEY}}', 'Content-Type': 'application/json' } });\n  const cfg = (Array.isArray(cfgResp) && cfgResp.length > 0 && cfgResp[0].enabled) ? cfgResp[0].config : null;\n  if (!cfg || !cfg.api_key) return null;\n  const provider = cfg.provider || 'openai';\n  const apiKey = cfg.api_key;\n  const model = cfg.model || 'text-embedding-3-small';\n  try {\n    if (provider === 'openai') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.openai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model, input: text }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'voyage') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.voyageai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'voyage-3-lite', input: [text] }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'ollama') {\n      const ollamaUrl = cfg.ollama_url || 'http://localhost:11434';\n      const res = await helpers.httpRequest({ method: 'POST', url: `${ollamaUrl}/api/embed`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'nomic-embed-text', input: text }) });\n      return res.embeddings[0];\n    }\n  } catch(e) { return null; }\n  return null;\n}\n\nlet input;\ntry { input = JSON.parse(query); } catch(e) { input = {content: query}; }\nconst content = input.content || query;\nconst embedding = await getEmbedding(content);\nconst cat = input.category || 'general';\nconst imp = input.importance || 5;\nconst body = { content, category: cat, importance: imp, metadata: { source: 'agent' }, source: input.source || 'conversation' };\nif (input.tags && Array.isArray(input.tags)) body.tags = input.tags.map(t => t.toLowerCase());\nif (input.entity_name) body.entity_name = input.entity_name;\nif (embedding) body.embedding = JSON.stringify(embedding);\n// Auto-set expires_at based on category + importance\nconst neverExpire = ['contact', 'preference', 'decision'];\nif (!neverExpire.includes(cat) && imp < 9) {\n  const days = (cat === 'consolidated' || imp <= 6) ? 90 : 180;\n  body.expires_at = new Date(Date.now() + days * 24 * 60 * 60 * 1000).toISOString();\n}\nconst result = await helpers.httpRequest({\n  method: 'POST',\n  url: '{{SUPABASE_URL}}/rest/v1/memory_long',\n  headers: {\n    'apikey': '{{SUPABASE_SERVICE_KEY}}',\n    'Content-Type': 'application/json',\n    'Prefer': 'return=representation'\n  },\n  body: JSON.stringify(body)\n});\nreturn JSON.stringify({ success: true, saved: content, vectorized: !!embedding });"
+      },
+      "id": "tool-memory-save",
+      "name": "Memory Save",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2576,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Delete a memory entry by ID. Input: JSON with id (number, required). Always search memory first to get the ID before deleting. Use when information is wrong, obsolete, or the user explicitly asks to forget something.",
+        "jsCode": "let input;\ntry { input = JSON.parse(query); } catch(e) { input = {}; }\nconst id = input.id;\nif (!id) return JSON.stringify({ error: 'id is required. Use memory_search first to find the ID.' });\nconst result = await helpers.httpRequest({\n  method: 'DELETE',\n  url: `{{SUPABASE_URL}}/rest/v1/memory_long?id=eq.${id}`,\n  headers: {\n    'apikey': '{{SUPABASE_SERVICE_KEY}}',\n    'Content-Type': 'application/json',\n    'Prefer': 'return=representation'\n  },\n  returnFullResponse: true\n});\nconst body = result.body;\nif (Array.isArray(body) && body.length === 0) return JSON.stringify({ error: `Memory with id ${id} not found — it may have already been deleted.` });\nreturn JSON.stringify({ success: true, deleted_id: id });"
+      },
+      "id": "tool-memory-delete",
+      "name": "Memory Delete",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2576,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Update an existing memory entry by ID. Input: JSON with id (number, required), and optional fields to update: content (string), category (general/decision/preference/contact/project/open_loop/insight), importance (1-10), tags (string array), entity_name (string), source (string), metadata (object — merged with existing metadata, not replaced). Always search memory first to get the ID before updating. For closing open_loops, pass metadata={closed:true, closed_at:'<iso>', outcome:'<brief>'}.",
+        "jsCode": "// Load embedding config from DB and generate embedding\nasync function getEmbedding(text) {\n  const cfgResp = await helpers.httpRequest({ method: 'GET', url: '{{SUPABASE_URL}}/rest/v1/tools_config?tool_name=eq.embedding&select=config,enabled', headers: { 'apikey': '{{SUPABASE_SERVICE_KEY}}', 'Content-Type': 'application/json' } });\n  const cfg = (Array.isArray(cfgResp) && cfgResp.length > 0 && cfgResp[0].enabled) ? cfgResp[0].config : null;\n  if (!cfg || !cfg.api_key) return null;\n  const provider = cfg.provider || 'openai';\n  const apiKey = cfg.api_key;\n  const model = cfg.model || 'text-embedding-3-small';\n  try {\n    if (provider === 'openai') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.openai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model, input: text }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'voyage') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.voyageai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'voyage-3-lite', input: [text] }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'ollama') {\n      const ollamaUrl = cfg.ollama_url || 'http://localhost:11434';\n      const res = await helpers.httpRequest({ method: 'POST', url: `${ollamaUrl}/api/embed`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'nomic-embed-text', input: text }) });\n      return res.embeddings[0];\n    }\n  } catch(e) { return null; }\n  return null;\n}\n\nlet input;\ntry { input = JSON.parse(query); } catch(e) { input = {}; }\nconst id = input.id;\nif (!id) return JSON.stringify({ error: 'id is required. Use memory_search first to find the ID.' });\nconst patch = {};\nif (input.content) patch.content = input.content;\nif (input.category) patch.category = input.category;\nif (input.importance) patch.importance = input.importance;\nif (input.tags) patch.tags = Array.isArray(input.tags) ? input.tags.map(t => t.toLowerCase()) : input.tags;\nif (input.entity_name) patch.entity_name = input.entity_name;\nif (input.source) patch.source = input.source;\nif (input.metadata && typeof input.metadata === 'object') {\n  const existing = await helpers.httpRequest({ method: 'GET', url: `{{SUPABASE_URL}}/rest/v1/memory_long?id=eq.${id}&select=metadata`, headers: { 'apikey': '{{SUPABASE_SERVICE_KEY}}' } });\n  const current = (Array.isArray(existing) && existing[0] && existing[0].metadata) ? existing[0].metadata : {};\n  patch.metadata = { ...current, ...input.metadata };\n}\nif (Object.keys(patch).length === 0) return JSON.stringify({ error: 'Provide at least one field to update: content, category, importance, tags, entity_name, source, or metadata.' });\nif (input.content) {\n  const embedding = await getEmbedding(input.content);\n  if (embedding) patch.embedding = JSON.stringify(embedding);\n}\npatch.updated_at = new Date().toISOString();\nconst result = await helpers.httpRequest({\n  method: 'PATCH',\n  url: `{{SUPABASE_URL}}/rest/v1/memory_long?id=eq.${id}`,\n  headers: {\n    'apikey': '{{SUPABASE_SERVICE_KEY}}',\n    'Content-Type': 'application/json',\n    'Prefer': 'return=representation'\n  },\n  body: JSON.stringify(patch),\n  returnFullResponse: true\n});\nconst body = result.body;\nif (Array.isArray(body) && body.length === 0) return JSON.stringify({ error: `Memory with id ${id} not found.` });\nreturn JSON.stringify({ success: true, updated_id: id, fields: Object.keys(patch).filter(k => k !== 'updated_at' && k !== 'embedding'), vectorized: !!patch.embedding });"
+      },
+      "id": "tool-memory-update",
+      "name": "Memory Update",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2448,
+        336
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Manage the knowledge graph — entities (people, companies, projects, places, events, topics) and their relationships.\n\nInput: JSON with action and parameters.\n\nActions:\n- search: Find entities. Optional: query (semantic search), name (text match), type (free text filter, e.g. person/company/project)\n- save: Create entity. Required: name. Optional: entity_type (ALWAYS English lowercase — person, company, project, place, event, topic, product, skill, concept, or anything fitting), summary, metadata\n- update: Update entity. Required: id (UUID). Optional: name, entity_type, summary, metadata\n- relate: Create relationship. Required: source_name, target_name, relation_type (ALWAYS English lowercase — works_at, knows, interested_in, recommended, collaborated_on, lives_in, manages, founded, etc.). Optional: weight (0-1), valid_from, valid_until\n- graph: Get entity network. Required: name. Optional: depth (default 2)\n- delete: Remove entity and its relations. Required: id (UUID)\n\nExamples:\n{\"action\":\"save\",\"name\":\"Bastian Hiller\",\"entity_type\":\"person\",\"summary\":\"Speaker at DestinationCamp 2026\"}\n{\"action\":\"relate\",\"source_name\":\"Bastian Hiller\",\"target_name\":\"DestinationCamp\",\"relation_type\":\"speaks_at\"}\n{\"action\":\"graph\",\"name\":\"DestinationCamp\",\"depth\":2}\n{\"action\":\"search\",\"query\":\"tourism conference\",\"type\":\"event\"}",
+        "jsCode": "const SUPABASE_URL = '{{SUPABASE_URL}}';\nconst SUPABASE_KEY = '{{SUPABASE_SERVICE_KEY}}';\n\nasync function pgrest(method, path, body, extraHeaders = {}) {\n  const opts = {\n    method,\n    url: `${SUPABASE_URL}${path}`,\n    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', ...extraHeaders },\n    returnFullResponse: true,\n    ignoreHttpStatusErrors: true\n  };\n  if (body) opts.body = JSON.stringify(body);\n  const res = await helpers.httpRequest(opts);\n  if (!res.body || res.body === '') return null;\n  return typeof res.body === 'string' ? JSON.parse(res.body) : res.body;\n}\n\n// Normalize type strings: lowercase, spaces/hyphens to underscores, trim\nfunction normalize(s) {\n  if (!s) return null;\n  return s.trim().toLowerCase().replace(/ä/g,'ae').replace(/ö/g,'oe').replace(/ü/g,'ue').replace(/ß/g,'ss').replace(/[\\s-]+/g, '_').replace(/[^a-z0-9_]/g, '');\n}\n\nasync function getEmbedding(text) {\n  const cfgResp = await pgrest('GET', '/rest/v1/tools_config?tool_name=eq.embedding&select=config,enabled');\n  const cfg = (Array.isArray(cfgResp) && cfgResp.length > 0 && cfgResp[0].enabled) ? cfgResp[0].config : null;\n  if (!cfg || !cfg.api_key) return null;\n  const provider = cfg.provider || 'openai';\n  const apiKey = cfg.api_key;\n  const model = cfg.model || 'text-embedding-3-small';\n  try {\n    if (provider === 'openai') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.openai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model, input: text }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'voyage') {\n      const res = await helpers.httpRequest({ method: 'POST', url: 'https://api.voyageai.com/v1/embeddings', headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'voyage-3-lite', input: [text] }) });\n      return res.data[0].embedding;\n    }\n    if (provider === 'ollama') {\n      const ollamaUrl = cfg.ollama_url || 'http://localhost:11434';\n      const res = await helpers.httpRequest({ method: 'POST', url: `${ollamaUrl}/api/embed`, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ model: model || 'nomic-embed-text', input: text }) });\n      return res.embeddings[0];\n    }\n  } catch(e) { return null; }\n  return null;\n}\n\nlet input;\ntry { input = JSON.parse(query); } catch(e) { return 'Error: invalid JSON. Expected: {\"action\":\"search|save|update|relate|graph|delete\", ...}'; }\nconst action = input.action;\n\nif (action === 'search') {\n  const body = { match_count: input.limit || 10 };\n  if (input.query) {\n    const emb = await getEmbedding(input.query);\n    if (emb) { body.query_embedding = JSON.stringify(emb); body.match_threshold = 0.5; }\n  }\n  if (input.name) body.search_name = input.name;\n  if (input.type) body.filter_type = normalize(input.type);\n  const result = await pgrest('POST', '/rest/v1/rpc/search_entities', body);\n  return JSON.stringify(result);\n\n} else if (action === 'save') {\n  if (!input.name) return 'Error: name is required';\n  // Check if entity already exists (exact name match)\n  const existing = await pgrest('GET', `/rest/v1/kg_entities?name=ilike.${encodeURIComponent(input.name)}&select=id,name,entity_type,summary`);\n  if (existing && existing.length > 0) return JSON.stringify({ exists: true, entity: existing[0], hint: 'Entity already exists. Use update to modify it.' });\n  const entityType = normalize(input.entity_type);\n  const body = { name: input.name, entity_type: entityType, summary: input.summary || null, metadata: input.metadata || {} };\n  const embText = input.name + (input.summary ? ' ' + input.summary : '');\n  const emb = await getEmbedding(embText);\n  if (emb) body.embedding = JSON.stringify(emb);\n  const result = await pgrest('POST', '/rest/v1/kg_entities', body, { 'Prefer': 'return=representation' });\n  // Return existing types so agent stays consistent\n  const types = await pgrest('GET', '/rest/v1/kg_entities?select=entity_type&entity_type=not.is.null&order=entity_type');\n  const usedTypes = [...new Set((types || []).map(t => t.entity_type).filter(Boolean))];\n  // Find existing memories about this entity\n  const relatedMemories = await pgrest('GET', `/rest/v1/memory_long?entity_name=ilike.${encodeURIComponent(input.name)}&select=id,content,category,tags&order=importance.desc&limit=5`);\n  const response = { success: true, entity: Array.isArray(result) ? result[0] : result, existing_entity_types: usedTypes };\n  if (relatedMemories && relatedMemories.length > 0) response.related_memories = relatedMemories;\n  return JSON.stringify(response);\n\n} else if (action === 'update') {\n  if (!input.id) return 'Error: id (UUID) is required';\n  const patch = {};\n  if (input.name) patch.name = input.name;\n  if (input.entity_type) patch.entity_type = normalize(input.entity_type);\n  if (input.summary !== undefined) patch.summary = input.summary;\n  if (input.metadata) patch.metadata = input.metadata;\n  if (Object.keys(patch).length === 0) return 'Error: provide at least one field to update';\n  if (input.name || input.summary) {\n    const current = await pgrest('GET', `/rest/v1/kg_entities?id=eq.${input.id}&select=name,summary`);\n    const e = Array.isArray(current) && current[0] ? current[0] : {};\n    const embText = (patch.name || e.name) + ' ' + (patch.summary || e.summary || '');\n    const emb = await getEmbedding(embText);\n    if (emb) patch.embedding = JSON.stringify(emb);\n  }\n  patch.updated_at = new Date().toISOString();\n  const result = await pgrest('PATCH', `/rest/v1/kg_entities?id=eq.${input.id}`, patch, { 'Prefer': 'return=representation' });\n  if (Array.isArray(result) && result.length === 0) return JSON.stringify({ error: `Entity ${input.id} not found` });\n  return JSON.stringify({ success: true, entity: Array.isArray(result) ? result[0] : result });\n\n} else if (action === 'relate') {\n  if (!input.source_name || !input.target_name || !input.relation_type) return 'Error: source_name, target_name, and relation_type are required';\n  const relType = normalize(input.relation_type);\n  // Resolve names to IDs\n  const srcList = await pgrest('GET', `/rest/v1/kg_entities?name=ilike.${encodeURIComponent(input.source_name)}&select=id,name`);\n  const tgtList = await pgrest('GET', `/rest/v1/kg_entities?name=ilike.${encodeURIComponent(input.target_name)}&select=id,name`);\n  if (!srcList || srcList.length === 0) return `Error: entity \"${input.source_name}\" not found. Save it first with action \"save\".`;\n  if (!tgtList || tgtList.length === 0) return `Error: entity \"${input.target_name}\" not found. Save it first with action \"save\".`;\n  // Check for duplicate relation\n  const dupCheck = await pgrest('GET', `/rest/v1/kg_relations?source_id=eq.${srcList[0].id}&target_id=eq.${tgtList[0].id}&relation_type=eq.${encodeURIComponent(relType)}&valid_until=is.null&select=id`);\n  if (dupCheck && dupCheck.length > 0) return JSON.stringify({ exists: true, relation_id: dupCheck[0].id, hint: 'This relation already exists.' });\n  const body = {\n    source_id: srcList[0].id,\n    target_id: tgtList[0].id,\n    relation_type: relType,\n    weight: input.weight || 1.0,\n    metadata: input.metadata || {}\n  };\n  if (input.valid_from) body.valid_from = input.valid_from;\n  if (input.valid_until) body.valid_until = input.valid_until;\n  const result = await pgrest('POST', '/rest/v1/kg_relations', body, { 'Prefer': 'return=representation' });\n  // Return existing relation types so agent stays consistent\n  const rtypes = await pgrest('GET', '/rest/v1/kg_relations?select=relation_type&order=relation_type');\n  const usedRelTypes = [...new Set((rtypes || []).map(r => r.relation_type).filter(Boolean))];\n  return JSON.stringify({ success: true, relation: Array.isArray(result) ? result[0] : result, existing_relation_types: usedRelTypes });\n\n} else if (action === 'graph') {\n  if (!input.name) return 'Error: name is required';\n  const entities = await pgrest('GET', `/rest/v1/kg_entities?name=ilike.${encodeURIComponent(input.name)}&select=id,name,entity_type,summary`);\n  if (!entities || entities.length === 0) return `Error: entity \"${input.name}\" not found`;\n  const startEntity = entities[0];\n  const graph = await pgrest('POST', '/rest/v1/rpc/search_entity_graph', { start_id: startEntity.id, max_depth: input.depth || 2 });\n  // Include related memories for the center entity\n  const memories = await pgrest('GET', `/rest/v1/memory_long?entity_name=ilike.${encodeURIComponent(input.name)}&select=id,content,category,tags&order=importance.desc&limit=5`);\n  const response = { center: startEntity, connections: graph };\n  if (memories && memories.length > 0) response.related_memories = memories;\n  return JSON.stringify(response);\n\n} else if (action === 'delete') {\n  if (!input.id) return 'Error: id (UUID) is required';\n  await pgrest('DELETE', `/rest/v1/kg_entities?id=eq.${input.id}`);\n  return JSON.stringify({ success: true, deleted_id: input.id });\n\n} else {\n  return 'Error: unknown action \"' + action + '\". Use: search, save, update, relate, graph, delete';\n}"
+      },
+      "id": "tool-entity-manager",
+      "name": "Entity Manager",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2448,
+        464
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Make HTTP requests. Input: JSON with url (string) and optional method (GET/POST).",
+        "jsCode": "let input;\ntry { input = JSON.parse(query); } catch(e) { input = {url: query}; }\nif (!input.url) return 'Fehler: url ist Pflicht';\nconst result = await helpers.httpRequest({\n  method: input.method || 'GET',\n  url: input.url,\n  headers: input.headers || {}\n});\nreturn typeof result === 'string' ? result.substring(0,4000) : JSON.stringify(result).substring(0,4000);"
+      },
+      "id": "tool-http",
+      "name": "HTTP Tool",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2704,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Search the web. Input: search query as string or JSON with q field. Returns top 5 results with title, URL, and snippet.",
+        "jsCode": "let input;\ntry { input = JSON.parse(query); } catch(e) { input = { q: query }; }\nconst q = input.q || input.query || query;\nconst result = await helpers.httpRequest({\n  method: 'GET',\n  url: `http://searxng:8080/search?q=${encodeURIComponent(q)}&format=json&language=de`,\n  headers: { 'Accept': 'application/json' }\n});\nconst hits = (result.results || []).slice(0, 5).map(r =>\n  `${r.title}\\n${r.url}\\n${r.content || ''}`\n).join('\\n\\n');\nreturn hits || 'Keine Ergebnisse gefunden.';"
+      },
+      "id": "tool-web-search",
+      "name": "Web Search",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2832,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Read a webpage and return its content as clean markdown. Input: URL string or JSON with url field. Use this instead of HTTP Tool when you need to read webpage content (articles, docs, blog posts). Returns clean text without HTML boilerplate.",
+        "jsCode": "let input;\ntry { input = JSON.parse(query); } catch(e) { input = { url: query }; }\nif (!input.url) return 'Fehler: url ist Pflicht';\ntry {\n  const resp = await helpers.httpRequest({\n    method: 'POST',\n    url: 'http://crawl4ai:11235/crawl',\n    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer {{CRAWL4AI_API_TOKEN}}' },\n    body: JSON.stringify({ urls: [input.url], crawler_config: { type: 'CrawlerRunConfig', params: { stream: false, cache_mode: 'bypass' } } }),\n    timeout: 30000\n  });\n  const results = resp.results || resp;\n  const result = Array.isArray(results) ? results[0] : results;\n  if (!result.success) return 'Fehler: ' + (result.error_message || 'Crawl fehlgeschlagen');\n  const mdObj = result.markdown || {};\n  const md = typeof mdObj === 'string' ? mdObj : (mdObj.raw_markdown || '');\n  return md.substring(0, 8000);\n} catch(e) {\n  return 'Fehler beim Abrufen: ' + e.message;\n}"
+      },
+      "id": "tool-web-reader",
+      "name": "Web Reader",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2960,
+        80
+      ]
+    },
+    {
+      "parameters": {
+        "description": "List or manage n8n workflows. Input: JSON with action (list/get/create) and optional workflowId.",
+        "jsCode": "let input;\ntry { input = JSON.parse(query); } catch(e) { input = {action:'list'}; }\nconst apiKey = '{{N8N_API_KEY}}';\nconst hdrs = {'X-N8N-API-KEY': apiKey, 'Content-Type': 'application/json'};\nlet result;\nif (input.action === 'list') {\n  result = await helpers.httpRequest({method:'GET', url:'{{N8N_INTERNAL_URL}}/api/v1/workflows', headers: hdrs});\n} else if (input.action === 'get' && input.workflowId) {\n  result = await helpers.httpRequest({method:'GET', url:'{{N8N_INTERNAL_URL}}/api/v1/workflows/'+input.workflowId, headers: hdrs});\n} else {\n  return JSON.stringify({error: 'Use action: list or get'});\n}\nreturn JSON.stringify(result);"
+      },
+      "id": "tool-self-modify",
+      "name": "Self Modify",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        2960,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Set a timed reminder, scheduled task, or recurring action. Modes:\\n- Reminder (type='reminder'): sends a Telegram message at the given time. Use for 'remind me at/in...'.\\n- Task (type='task'): the agent executes the instructions once at the given time and sends the result. Use for 'do X at Y o'clock'.\\n- Recurring (type='recurring'): creates a repeating scheduled action. Extra fields: name (label), instruction (what to do), schedule (object), action_type ('agent_task' or 'briefing', default 'agent_task'), notify_mode ('always' or 'on_change', default 'always'), timezone (default 'Europe/Berlin'). Schedule formats: {\"type\":\"interval\",\"minutes\":30} or {\"type\":\"daily\",\"time\":\"08:00\"} or {\"type\":\"weekly\",\"days\":[1,5],\"time\":\"09:00\"} (1=Mon..7=Sun). notify_mode: 'always' = always send result (use for briefings, reports). 'on_change' = only notify when something NEW is found (use for background monitoring like checking emails, news, prices, stock).\\n- Management (scheduled actions): action='list' (show all scheduled actions), action='enable'/'disable'/'delete' with target_id (ID of the action to manage).\\n- Management (one-time reminders): action='list_reminders' (show all pending reminders with their IDs), action='edit_reminder' with target_id + message and/or time (update a pending reminder), action='delete_reminder' with target_id (delete a reminder).\\nInput for reminder/task: time (ISO 8601), message (text), type. Input for recurring: see above. Input for management: action, target_id.",
+        "workflowId": {
+          "__rl": true,
+          "value": "REPLACE_REMINDER_FACTORY_ID",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "tool-reminder-wf",
+      "name": "Reminder",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        2960,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Builds new n8n workflows for general automations and integrations. Use when the user explicitly wants to automate something or build an integration workflow. NOT for MCP servers — use mcp_builder for that. NOT as a fallback when other tools fail. Input: JSON with 'task' (description of the automation to build).",
+        "workflowId": {
+          "__rl": true,
+          "value": "REPLACE_WORKFLOW_BUILDER_ID",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "tool-workflow-builder",
+      "name": "WorkflowBuilder",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        3088,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "name": "mcp_builder",
+        "description": "Builds a new MCP Server workflow in n8n. ALWAYS use this when the user wants to build an MCP server, MCP tool, or API integration as MCP. NEVER use WorkflowBuilder for MCP. On error: report the error, do NOT fall back to WorkflowBuilder. Input: JSON with 'task' (description of what the server should do).",
+        "workflowId": {
+          "__rl": true,
+          "value": "REPLACE_MCP_BUILDER_ID",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "mcp-builder-tool",
+      "name": "MCP Builder",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2,
+      "position": [
+        3344,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Calls a tool on an MCP server. Use when the user asks something that an available MCP server can answer (weather, book lookup, etc.). Required parameters: mcp_url (server URL), tool_name (tool to call), arguments (JSON object with parameters). Check mcp_registry table for available servers and their tools.",
+        "jsCode": "const qType = typeof query;\nlet mcpUrl = '', toolName = '', args = {};\n\nif (qType === 'object' && query !== null) {\n  mcpUrl = query.mcp_url || '';\n  toolName = query.tool_name || '';\n  args = query.arguments || {};\n} else if (qType === 'string') {\n  try {\n    const parsed = JSON.parse(query);\n    mcpUrl = parsed.mcp_url || '';\n    toolName = parsed.tool_name || '';\n    args = parsed.arguments || {};\n  } catch(e) {\n    return 'Parse error: query=' + String(query).substring(0,200) + ' type=' + qType;\n  }\n} else {\n  return 'Unexpected query type: ' + qType + ' value: ' + String(query).substring(0,200);\n}\n\nif (typeof args === 'string') try { args = JSON.parse(args); } catch(e) {}\nif (!mcpUrl || !toolName) return 'Fehler: mcp_url=' + mcpUrl + ' tool_name=' + toolName + ' (query type was: ' + qType + ')';\n\nfunction parseSSE(raw) {\n  const str = String(raw);\n  let lines = str.split('\\n');\n  if (lines.length <= 1) lines = str.split('\\\\n');\n  for (let i = lines.length - 1; i >= 0; i--) {\n    const line = lines[i].trim();\n    if (line.startsWith('data: ')) {\n      return JSON.parse(line.substring(6));\n    }\n  }\n  return null;\n}\n\ntry {\n  let authHeader = null;\n  try {\n    const row = await helpers.httpRequest({method:'GET',url:'{{SUPABASE_URL}}/rest/v1/mcp_registry?mcp_url=eq.'+encodeURIComponent(mcpUrl)+'&select=auth_type,auth_token&limit=1',headers:{apikey:'{{SUPABASE_SERVICE_KEY}}',Authorization:'Bearer {{SUPABASE_SERVICE_KEY}}'},json:true});\n    if (row && row[0] && row[0].auth_type && row[0].auth_type !== 'none' && row[0].auth_token) {\n      authHeader = row[0].auth_type === 'bearer' ? 'Bearer '+row[0].auth_token : row[0].auth_token;\n    }\n  } catch(e) {}\n\n  const hdrs = {'Content-Type':'application/json','Accept':'application/json, text/event-stream'};\n  if (authHeader) hdrs['Authorization'] = authHeader;\n\n  // 1. Initialize\n  const init = await helpers.httpRequest({\n    method: 'POST', url: mcpUrl,\n    headers: hdrs,\n    body: JSON.stringify({jsonrpc:'2.0',id:1,method:'initialize',params:{protocolVersion:'2024-11-05',capabilities:{},clientInfo:{name:'n8n-claw-mcp',version:'1.0'}}}),\n    returnFullResponse: true, encoding: 'utf-8', json: false\n  });\n  const sid = init.headers && init.headers['mcp-session-id'];\n  if (sid) hdrs['mcp-session-id'] = sid;\n\n  // 2. Initialized notification\n  await helpers.httpRequest({\n    method: 'POST', url: mcpUrl,\n    headers: hdrs,\n    body: JSON.stringify({jsonrpc:'2.0',method:'notifications/initialized'}),\n    json: false\n  });\n\n  // 3. List tools to get schemas (auto-fill missing required params)\n  const listResp = await helpers.httpRequest({\n    method: 'POST', url: mcpUrl,\n    headers: hdrs,\n    body: JSON.stringify({jsonrpc:'2.0',id:2,method:'tools/list',params:{}}),\n    json: false\n  });\n  const listResult = parseSSE(listResp);\n  let toolSchema = null;\n  if (listResult && listResult.result && listResult.result.tools) {\n    const tool = listResult.result.tools.find(t => t.name === toolName);\n    if (tool && tool.inputSchema) toolSchema = tool.inputSchema;\n  }\n\n  function schemaHint(problem) {\n    if (!toolSchema) return null;\n    return 'Tool \"' + toolName + '\" call rejected: ' + problem +\n      '\\n\\nCorrect input schema:\\n' + JSON.stringify(toolSchema, null, 2) +\n      '\\n\\nRetry the tool call with parameter names matching this schema exactly.';\n  }\n\n  if (toolSchema && toolSchema.properties) {\n    const allowed = Object.keys(toolSchema.properties);\n    const required = toolSchema.required || [];\n    const unknown = Object.keys(args).filter(k => !allowed.includes(k));\n    const missing = required.filter(r => args[r] === undefined || args[r] === null);\n    if (unknown.length > 0 || missing.length > 0) {\n      const problems = [];\n      if (unknown.length > 0) problems.push('unknown args [' + unknown.join(', ') + ']');\n      if (missing.length > 0) problems.push('missing required args [' + missing.join(', ') + ']');\n      return schemaHint(problems.join('; '));\n    }\n  }\n\n  const resp = await helpers.httpRequest({\n    method: 'POST', url: mcpUrl,\n    headers: hdrs,\n    body: JSON.stringify({jsonrpc:'2.0',id:3,method:'tools/call',params:{name:toolName,arguments:args}}),\n    returnFullResponse: true, encoding: 'utf-8', json: false\n  });\n\n  const result = parseSSE(resp.body || resp);\n  if (!result) return String(resp.body || resp);\n  if (result.error) {\n    return schemaHint('server error: ' + JSON.stringify(result.error)) || ('MCP Error: ' + JSON.stringify(result.error));\n  }\n  if (result.result && result.result.isError) {\n    const errText = (result.result.content && result.result.content[0] && result.result.content[0].text) || JSON.stringify(result.result);\n    return schemaHint('tool returned error: ' + errText) || ('MCP Tool Error: ' + errText);\n  }\n  return result.result?.content?.[0]?.text || JSON.stringify(result.result);\n} catch(e) {\n  return 'MCP Error: ' + e.message;\n}",
+        "specifyInputSchema": false
+      },
+      "id": "mcp-client-code",
+      "name": "MCP Client",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        3472,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "description": "Manage tasks. Input: JSON with action and parameters.\n\nActions:\n- list: List tasks. Optional: status (pending/in_progress/done/cancelled), priority, due_before (ISO date)\n- create: Create task. Required: title. Optional: description, priority (low/medium/high/urgent), due_date (ISO 8601), parent_id (for subtasks), tags (array)\n- update: Update task. Required: id. Optional: title, description, status, priority, due_date, tags\n- delete: Delete task. Required: id\n- summary: Overview of all pending/in_progress tasks grouped by priority\n- set_preference: Save user preference. Required: key, value. Example: {\"action\":\"set_preference\",\"key\":\"morning_briefing\",\"value\":{\"enabled\":true,\"time\":\"08:00\"}}\n\nExamples:\n{\"action\":\"create\",\"title\":\"Call dentist\",\"due_date\":\"2026-03-10T10:00:00+01:00\",\"priority\":\"high\"}\n{\"action\":\"list\",\"status\":\"pending\"}\n{\"action\":\"update\",\"id\":5,\"status\":\"done\"}\n{\"action\":\"summary\"}",
+        "jsCode": "const SUPABASE_URL = '{{SUPABASE_URL}}';\nconst SUPABASE_KEY = '{{SUPABASE_SERVICE_KEY}}';\nconst CHAT_ID = '{{TELEGRAM_CHAT_ID}}';\n\nasync function pgrest(method, path, body, extraHeaders = {}) {\n  const opts = {\n    method,\n    url: `${SUPABASE_URL}${path}`,\n    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', ...extraHeaders },\n    returnFullResponse: true,\n    ignoreHttpStatusErrors: true\n  };\n  if (body) opts.body = JSON.stringify(body);\n  const res = await helpers.httpRequest(opts);\n  if (!res.body || res.body === '') return null;\n  return typeof res.body === 'string' ? JSON.parse(res.body) : res.body;\n}\n\nlet input;\ntry { input = JSON.parse(query); } catch(e) { return 'Error: invalid JSON. Expected: {\"action\":\"list|create|update|delete|summary|set_preference\", ...}'; }\n\nconst userId = `telegram:${CHAT_ID}`;\nconst action = input.action;\n\nif (action === 'list') {\n  let filter = `user_id=eq.${encodeURIComponent(userId)}`;\n  if (input.status) filter += `&status=eq.${input.status}`;\n  if (input.priority) filter += `&priority=eq.${input.priority}`;\n  if (input.due_before) filter += `&due_date=lte.${input.due_before}`;\n  filter += '&parent_id=is.null&order=due_date.asc.nullslast,priority.desc,created_at.desc';\n  const tasks = await pgrest('GET', `/rest/v1/tasks?${filter}&select=*`);\n  return JSON.stringify(tasks);\n\n} else if (action === 'create') {\n  if (!input.title) return 'Error: title is required';\n  const body = {\n    user_id: userId,\n    title: input.title,\n    description: input.description || null,\n    priority: input.priority || 'medium',\n    due_date: input.due_date || null,\n    parent_id: input.parent_id || null,\n    tags: input.tags || []\n  };\n  const result = await pgrest('POST', '/rest/v1/tasks', body, { 'Prefer': 'return=representation' });\n  return JSON.stringify({ success: true, task: Array.isArray(result) ? result[0] : result });\n\n} else if (action === 'update') {\n  if (!input.id) return 'Error: id is required';\n  const body = {};\n  if (input.title) body.title = input.title;\n  if (input.description !== undefined) body.description = input.description;\n  if (input.status) {\n    body.status = input.status;\n    if (input.status === 'done') body.completed_at = new Date().toISOString();\n  }\n  if (input.priority) body.priority = input.priority;\n  if (input.due_date !== undefined) body.due_date = input.due_date;\n  if (input.tags) body.tags = input.tags;\n  body.updated_at = new Date().toISOString();\n  const result = await pgrest('PATCH', `/rest/v1/tasks?id=eq.${input.id}&user_id=eq.${encodeURIComponent(userId)}`, body, { 'Prefer': 'return=representation' });\n  return JSON.stringify({ success: true, task: Array.isArray(result) ? result[0] : result });\n\n} else if (action === 'delete') {\n  if (!input.id) return 'Error: id is required';\n  await pgrest('DELETE', `/rest/v1/tasks?id=eq.${input.id}&user_id=eq.${encodeURIComponent(userId)}`);\n  return JSON.stringify({ success: true, deleted: input.id });\n\n} else if (action === 'summary') {\n  const tasks = await pgrest('GET', `/rest/v1/tasks?user_id=eq.${encodeURIComponent(userId)}&status=in.(pending,in_progress)&parent_id=is.null&order=priority.desc,due_date.asc.nullslast&select=*`);\n  const profiles = await pgrest('GET', `/rest/v1/user_profiles?user_id=eq.${encodeURIComponent(userId)}&select=timezone`);\n  const tz = (profiles && profiles[0] && profiles[0].timezone) || 'Europe/Berlin';\n  const now = new Date();\n  const todayStr = now.toLocaleDateString('en-CA', { timeZone: tz });\n  const overdue = tasks.filter(t => { if (!t.due_date) return false; const d = new Date(t.due_date); return d < now && d.toLocaleDateString('en-CA', { timeZone: tz }) !== todayStr; });\n  const dueToday = tasks.filter(t => { if (!t.due_date) return false; return new Date(t.due_date).toLocaleDateString('en-CA', { timeZone: tz }) === todayStr; });\n  return JSON.stringify({\n    total_pending: tasks.length, overdue: overdue.length, due_today: dueToday.length,\n    by_priority: { urgent: tasks.filter(t => t.priority === 'urgent').length, high: tasks.filter(t => t.priority === 'high').length, medium: tasks.filter(t => t.priority === 'medium').length, low: tasks.filter(t => t.priority === 'low').length },\n    tasks: tasks.map(t => ({ id: t.id, title: t.title, status: t.status, priority: t.priority, due_date: t.due_date }))\n  });\n\n} else if (action === 'set_preference') {\n  if (!input.key || input.value === undefined) return 'Error: key and value required';\n  const profiles = await pgrest('GET', `/rest/v1/user_profiles?user_id=eq.${encodeURIComponent(userId)}&select=preferences`);\n  const current = (profiles[0] && profiles[0].preferences) || {};\n  current[input.key] = input.value;\n  await pgrest('PATCH', `/rest/v1/user_profiles?user_id=eq.${encodeURIComponent(userId)}`, { preferences: current, updated_at: new Date().toISOString() }, { 'Prefer': 'return=minimal' });\n  if (input.key === 'morning_briefing' && input.value.enabled !== undefined) {\n    await pgrest('PATCH', `/rest/v1/heartbeat_config?check_name=eq.morning_briefing`, { enabled: input.value.enabled }, { 'Prefer': 'return=minimal' });\n  }\n  return JSON.stringify({ success: true, preference: input.key, value: input.value });\n\n} else {\n  return 'Error: unknown action \"' + action + '\". Use: list, create, update, delete, summary, set_preference';\n}"
+      },
+      "id": "tool-task-manager",
+      "name": "Task Manager",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        3600,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "name": "library_manager",
+        "description": "Manage the MCP template library. Install, list, or remove MCP server templates from the catalog. Add API credentials for installed templates.\n\nActions:\n- list_templates: Show available templates. Optional: category filter.\n- install_template: Install a template by ID. Creates the MCP server workflow.\n- remove_template: Remove an installed template by ID.\n- add_credential: Generate secure one-time link(s) to add/update API key(s) for an installed template. Required: id. Optional: cred_key (if omitted, generates links for ALL required credentials).\n\nInput: JSON with action and parameters.\nExamples:\n{\"action\":\"list_templates\"}\n{\"action\":\"install_template\",\"id\":\"weather-openmeteo\"}\n{\"action\":\"remove_template\",\"id\":\"weather-openmeteo\"}\n{\"action\":\"add_credential\",\"id\":\"google-reviews\"}",
+        "workflowId": {
+          "__rl": true,
+          "value": "REPLACE_LIBRARY_MANAGER_ID",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "tool-library-manager",
+      "name": "Library Manager",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        3728,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "name": "browser_action",
+        "description": "Drive a real browser to perform actions on websites: sign up for newsletters, fill out forms, click buttons, log in, navigate UIs, extract content from JS-rendered or login-gated pages. NOT for simple read-only fetches — use web_reader for that instead. Input is a JSON string in `query`. Actions:\\n- action='task': run a natural-language browser task. Required: task (description). Optional: url (starting URL), domain (e.g. 'github.com' — if set, the browser session is pooled and reused on the same domain so the agent stays logged in across calls), max_steps (default 25), timeout_s (default 300).\\n- action='list_sessions': list all active pooled browser sessions (logged-in domains).\\n- action='close_session': close a specific pooled session. Required: domain.\\nSessions live in-memory for up to 30 minutes idle, max 5 concurrent; they are lost when the bridge container restarts. For sensitive actions (purchases, posts, irreversible changes) ALWAYS confirm with the user first. Typical task takes 30–90 seconds.",
+        "workflowId": {
+          "__rl": true,
+          "value": "REPLACE_BROWSER_USE_ID",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "tool-browser-use",
+      "name": "Browser Action",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        3856,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT name, status, updated_at FROM projects WHERE status = 'active' ORDER BY updated_at DESC LIMIT 20",
+        "options": {
+          "queryBatching": "independently"
+        }
+      },
+      "id": "load-active-projects",
+      "name": "Load Active Projects",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "executeOnce": true,
+      "position": [
+        2096,
+        -16
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "SELECT id, content, importance FROM memory_long WHERE category = 'insight' AND COALESCE(metadata->>'outdated', 'false') <> 'true' ORDER BY importance DESC, created_at DESC LIMIT 3",
+        "options": {
+          "queryBatching": "independently"
+        }
+      },
+      "id": "load-insights",
+      "name": "Load Insights",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "executeOnce": true,
+      "position": [
+        2208,
+        -16
+      ],
+      "credentials": {
+        "postgres": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Supabase Postgres"
+        }
+      },
+      "alwaysOutputData": true,
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "description": "Manage projects — persistent markdown documents for tracking ongoing work across conversations. Use this when a topic spans multiple sessions (e.g. building a presentation, planning an event, setting up a server).\n\nInput: JSON with action and fields:\n- list: Returns all projects with name, status, updated_at.\n- read: name (string). Returns the full markdown content.\n- create: name (string), content (string, markdown). Creates a new project.\n- update: name (string), content (string, markdown). Replaces the entire project content. Always read first, then send the complete updated document.\n- archive: name (string). Sets status to completed.\n\nExamples:\n{\"action\":\"list\"}\n{\"action\":\"create\",\"name\":\"KI Präsentation\",\"content\":\"## Ziel\\nPräsentation über KI im Tourismus\\n\\n## Gliederung\\n1. Einführung\\n2. Use Cases\"}\n{\"action\":\"read\",\"name\":\"KI Präsentation\"}\n{\"action\":\"update\",\"name\":\"KI Präsentation\",\"content\":\"## Ziel\\n...updated content...\"}\n{\"action\":\"archive\",\"name\":\"KI Präsentation\"}",
+        "jsCode": "const SUPABASE_URL = '{{SUPABASE_URL}}';\nconst SUPABASE_KEY = '{{SUPABASE_SERVICE_KEY}}';\n\nasync function pgrest(method, path, body, extraHeaders = {}) {\n  const opts = {\n    method,\n    url: `${SUPABASE_URL}${path}`,\n    headers: { 'apikey': SUPABASE_KEY, 'Content-Type': 'application/json', ...extraHeaders },\n    returnFullResponse: true,\n    ignoreHttpStatusErrors: true\n  };\n  if (body) opts.body = JSON.stringify(body);\n  const res = await helpers.httpRequest(opts);\n  if (!res.body || res.body === '') return null;\n  return typeof res.body === 'string' ? JSON.parse(res.body) : res.body;\n}\n\nlet input;\ntry { input = JSON.parse(query); } catch(e) { return 'Error: invalid JSON. Expected: {\"action\":\"list|read|create|update|archive\", ...}'; }\n\nconst action = input.action;\n\nif (action === 'list') {\n  const projects = await pgrest('GET', '/rest/v1/projects?order=updated_at.desc&select=name,status,updated_at');\n  if (!projects || projects.length === 0) return JSON.stringify({ projects: [], message: 'No projects yet.' });\n  return JSON.stringify({ projects });\n\n} else if (action === 'read') {\n  if (!input.name) return 'Error: name is required';\n  const projects = await pgrest('GET', `/rest/v1/projects?name=eq.${encodeURIComponent(input.name)}&select=name,status,content,created_at,updated_at`);\n  if (!projects || projects.length === 0) return JSON.stringify({ error: 'Project not found: ' + input.name });\n  return JSON.stringify(projects[0]);\n\n} else if (action === 'create') {\n  if (!input.name) return 'Error: name is required';\n  const body = { name: input.name, content: input.content || '', status: 'active' };\n  const result = await pgrest('POST', '/rest/v1/projects', body, { 'Prefer': 'return=representation' });\n  if (result && result.code) return JSON.stringify({ error: result.message || 'Create failed' });\n  return JSON.stringify({ success: true, project: Array.isArray(result) ? result[0] : result });\n\n} else if (action === 'update') {\n  if (!input.name) return 'Error: name is required';\n  if (input.content === undefined) return 'Error: content is required';\n  const body = { content: input.content, updated_at: new Date().toISOString() };\n  if (input.status) body.status = input.status;\n  const result = await pgrest('PATCH', `/rest/v1/projects?name=eq.${encodeURIComponent(input.name)}`, body, { 'Prefer': 'return=representation' });\n  if (!result || result.length === 0) return JSON.stringify({ error: 'Project not found: ' + input.name });\n  return JSON.stringify({ success: true, project: Array.isArray(result) ? result[0] : result });\n\n} else if (action === 'archive') {\n  if (!input.name) return 'Error: name is required';\n  const body = { status: 'completed', updated_at: new Date().toISOString() };\n  const result = await pgrest('PATCH', `/rest/v1/projects?name=eq.${encodeURIComponent(input.name)}`, body, { 'Prefer': 'return=representation' });\n  if (!result || result.length === 0) return JSON.stringify({ error: 'Project not found: ' + input.name });\n  return JSON.stringify({ success: true, archived: input.name });\n\n} else {\n  return 'Error: unknown action \"' + action + '\". Use: list, read, create, update, archive';\n}"
+      },
+      "id": "tool-project-manager",
+      "name": "Project Manager",
+      "type": "@n8n/n8n-nodes-langchain.toolCode",
+      "typeVersion": 1.2,
+      "position": [
+        3856,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "name": "expert_agent",
+        "description": "Delegate a task to a specialized expert agent. The expert works independently with its own AI model and tools, then returns a structured result. You should rephrase the result in your own tone before replying to the user.\n\nParameters (JSON):\n- agent: Expert agent identifier (e.g. \"research-expert\", \"content-creator\", \"data-analyst\")\n- task: Detailed task description — be specific about what you need\n- context: Relevant conversation context the expert should know (optional)\n\nExamples:\n{\"agent\":\"research-expert\",\"task\":\"Recherchiere die besten Wanderwege in Tirol mit Schwierigkeitsgrad und Länge\",\"context\":\"User plant einen Wanderurlaub im Sommer\"}\n{\"agent\":\"content-creator\",\"task\":\"Erstelle einen Instagram-Post über unser neues Produkt\",\"context\":\"Produkt: AI-gestützter Kalender, Zielgruppe: junge Berufstätige\"}\n{\"agent\":\"data-analyst\",\"task\":\"Analysiere diese Verkaufszahlen und erstelle einen Report\",\"context\":\"Q1 2026: Jan 45k, Feb 52k, Mär 61k\"}",
+        "workflowId": {
+          "__rl": true,
+          "value": "REPLACE_SUB_AGENT_RUNNER_ID",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "tool-expert-agent",
+      "name": "Expert Agent",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        3984,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "name": "agent_library",
+        "description": "Manage the expert agent library. Install, list, or remove specialized expert agents from the catalog.\n\nActions:\n- list_agents: Show all available agents from the catalog (with installed status).\n- install_agent: Install an agent by ID. Downloads persona from catalog and saves to database.\n- remove_agent: Remove an installed agent by ID.\n- list_installed: Show only currently installed agents.\n\nInput: JSON with action and parameters.\nExamples:\n{\"action\":\"list_agents\"}\n{\"action\":\"install_agent\",\"id\":\"research-expert\"}\n{\"action\":\"remove_agent\",\"id\":\"research-expert\"}\n{\"action\":\"list_installed\"}",
+        "workflowId": {
+          "__rl": true,
+          "value": "REPLACE_AGENT_LIBRARY_MANAGER_ID",
+          "mode": "id"
+        },
+        "workflowInputs": {
+          "mappingMode": "defineBelow",
+          "value": {},
+          "matchingColumns": [],
+          "schema": [],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        }
+      },
+      "id": "tool-agent-library",
+      "name": "Agent Library",
+      "type": "@n8n/n8n-nodes-langchain.toolWorkflow",
+      "typeVersion": 2.2,
+      "position": [
+        4112,
+        208
+      ]
+    },
+    {
+      "parameters": {
+        "chatId": "{{TELEGRAM_CHAT_ID}}",
+        "text": "={{ $fromAI('Text', '', 'string') }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "id": "tool-telegram-status",
+      "name": "Telegram Status",
+      "type": "n8n-nodes-base.telegramTool",
+      "typeVersion": 1.2,
+      "position": [
+        4240,
+        208
+      ],
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "agent",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        -300
+      ],
+      "webhookId": "webhook-agent-api",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Webhook Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "const body = $('Webhook Trigger').first().json.body;\nconst message = body.message || '';\nconst rawUserId = body.user_id || 'anonymous';\nconst rawSessionId = body.session_id || '';\nconst source = body.source || 'api';\nconst metadata = body.metadata || {};\n\n// Build qualified IDs with source prefix\nconst qualifiedUserId = rawUserId.includes(':') ? rawUserId : `api:${rawUserId}`;\nconst sessionId = rawSessionId\n  ? (rawSessionId.includes(':') ? rawSessionId : `${source}:${rawSessionId}`)\n  : `${source}:${rawUserId}`;\n\nreturn [{ json: {\n  userMessage: message,\n  chatId: null,\n  userId: rawUserId,\n  sessionId,\n  qualifiedUserId,\n  source,\n  metadata,\n  _webhookSource: true\n} }];"
+      },
+      "id": "format-webhook-input",
+      "name": "Format Webhook Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        480,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json._webhookSource }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "true"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Webhook"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json._webhookSource }}",
+                    "rightValue": true,
+                    "operator": {
+                      "type": "boolean",
+                      "operation": "false"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Telegram"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "response-router",
+      "name": "Response Router",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        4128,
+        -16
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ { success: true, response: $('AI Agent').first().json.output, session_id: $json.sessionId, source: $json.source, metadata: $json.metadata } }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-to-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        4352,
+        -208
+      ]
+    },
+    {
+      "id": "upload-to-file-bridge",
+      "name": "Upload to File Bridge",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        700,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://file-bridge:3200/upload",
+        "sendBody": true,
+        "contentType": "multipart-form-data",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "parameterType": "formBinaryData",
+              "name": "file",
+              "inputDataFieldName": "data"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "save-file-metadata",
+      "name": "Save File Metadata",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        920,
+        200
+      ],
+      "parameters": {
+        "jsCode": "const SUPABASE_URL = '{{SUPABASE_URL}}';\nconst SUPABASE_KEY = '{{SUPABASE_SERVICE_KEY}}';\nconst BRIDGE_URL = 'http://file-bridge:3200';\n\nconst msg = $('Telegram Trigger').first().json.message;\nconst sessionId = 'telegram:' + String(msg.chat.id);\nconst userId = String(msg.from.id);\nconst upload = $input.first().json;\n\nif (!upload || !upload.id) {\n  return [{ json: { file_ref: null } }];\n}\n\nawait helpers.httpRequest({\n  method: 'POST',\n  url: SUPABASE_URL + '/rest/v1/file_refs',\n  headers: {\n    'apikey': SUPABASE_KEY,\n    'Authorization': 'Bearer ' + SUPABASE_KEY,\n    'Content-Type': 'application/json'\n  },\n  body: JSON.stringify({\n    id: upload.id,\n    session_id: sessionId,\n    user_id: userId,\n    file_name: upload.file_name,\n    mime_type: upload.mime_type,\n    size_bytes: upload.size_bytes,\n    bridge_url: BRIDGE_URL + '/files/' + upload.id\n  })\n});\n\nreturn [{ json: { file_ref: upload.id, file_name: upload.file_name } }];"
+      }
+    },
+    {
+      "id": "detect-file-send",
+      "name": "Detect File Send",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        4352,
+        80
+      ],
+      "parameters": {
+        "jsCode": "const output = $('AI Agent').first().json.output || '';\n\n// Detect [send_file: URL] pattern\nconst fileMatch = output.match(/\\[send_file:\\s*(https?:\\/\\/[^\\]]+)\\]/);\n\nlet cleanText = output;\nlet fileUrl = null;\nlet hasFile = false;\n\nif (fileMatch) {\n  fileUrl = fileMatch[1].trim();\n  hasFile = true;\n  // Remove the marker from the text response\n  cleanText = output.replace(fileMatch[0], '').trim();\n}\n\nreturn [{ json: { text: cleanText, fileUrl, hasFile } }];"
+      }
+    },
+    {
+      "id": "file-router",
+      "name": "File Router",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        4576,
+        80
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "leftValue": "={{ $json.hasFile }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "download-file",
+      "name": "Download File",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        4800,
+        0
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $json.fileUrl }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      }
+    },
+    {
+      "id": "send-file-telegram",
+      "name": "Send File to Telegram",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        5024,
+        0
+      ],
+      "parameters": {
+        "operation": "sendDocument",
+        "chatId": "={{ $('Build System Prompt').first().json.chatId }}",
+        "binaryData": true,
+        "binaryPropertyName": "data",
+        "additionalFields": {}
+      },
+      "credentials": {
+        "telegramApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Telegram Bot"
+        }
+      }
+    },
+    {
+      "id": "merge-file-paths",
+      "name": "Merge File Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        760,
+        -16
+      ],
+      "parameters": {
+        "mode": "chooseBranch",
+        "output": "specifiedInput",
+        "useDataOfInput": 1
+      }
+    }
+  ]
+}

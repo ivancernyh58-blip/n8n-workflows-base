@@ -1,0 +1,259 @@
+{
+  "name": "Incident Severity Auto-Tagger (Template)",
+  "nodes": [
+    {
+      "id": "ba375958-bd4d-579c-b7ce-ace2949b3418",
+      "name": "Score Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "it-ops-security-incident-severity-auto-tagger-score",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "f6654ea5-8d30-5071-a56e-7c1b044c84c9",
+      "name": "Enrich From Source",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/it-ops-security-incident-severity-auto-tagger/enrich",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "9f048352-e8b5-51b5-b5ff-d2b13af704ec",
+      "name": "Score Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Score record for Incident Severity Auto-Tagger.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "286761d6-97ec-56e1-81b8-3e0274c16047",
+      "name": "High Score",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"score\"]}}",
+              "operation": "largerEqual"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "6ee93757-7ccd-5017-8f0d-bc2db482146b",
+      "name": "Update High Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/it-ops-security-incident-severity-auto-tagger/route-high",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "247c33b6-d3f0-5fc6-9aaa-b41ea8bc6e0a",
+      "name": "Update Low Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/it-ops-security-incident-severity-auto-tagger/route-low",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1d4530a9-0414-5a7d-8985-e55e9c34ae05",
+      "name": "Merge Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "e0462310-d5a1-5a0e-9688-d33b46edf8e1",
+      "name": "Respond Done",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"scored\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Score Webhook": {
+      "main": [
+        [
+          {
+            "node": "Enrich From Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich From Source": {
+      "main": [
+        [
+          {
+            "node": "Score Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Record": {
+      "main": [
+        [
+          {
+            "node": "High Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Score": {
+      "main": [
+        [
+          {
+            "node": "Update High Path",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Low Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update High Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Low Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Paths": {
+      "main": [
+        [
+          {
+            "node": "Respond Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:it-ops-security"
+    },
+    {
+      "name": "pattern:webhook-enrich-score-branch"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "it-ops-security",
+    "templatePattern": "webhook-enrich-score-branch"
+  },
+  "versionId": "ea9b531e-70e0-58c7-93f8-3f4b4b2a5782",
+  "id": "c4f68b0d-0794-5781-a406-4a9843fc5530"
+}

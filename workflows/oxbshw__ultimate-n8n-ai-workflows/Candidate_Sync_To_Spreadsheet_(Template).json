@@ -1,0 +1,259 @@
+{
+  "name": "Candidate Sync To Spreadsheet (Template)",
+  "nodes": [
+    {
+      "id": "fb70741f-dad2-54f1-a6d1-37ee8fef34e8",
+      "name": "Score Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "hr-recruiting-candidate-sync-to-spreadsheet-score",
+        "responseMode": "responseNode",
+        "options": {}
+      }
+    },
+    {
+      "id": "dc1dfed5-ad95-54c1-a4a6-78e5d11d976d",
+      "name": "Enrich From Source",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/hr-recruiting-candidate-sync-to-spreadsheet/enrich",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "d7f6f059-bb93-5b52-baf1-cc18510b3d5b",
+      "name": "Score Record",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Score record for Candidate Sync To Spreadsheet.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "e683d7e4-0637-5970-a9c3-65a33fd18cef",
+      "name": "High Score",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"score\"]}}",
+              "operation": "largerEqual"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "6e830159-21c8-56a8-94a9-03899c1b91d4",
+      "name": "Update High Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/hr-recruiting-candidate-sync-to-spreadsheet/route-high",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5000eb5a-e10d-5de6-bd55-8135f4d28649",
+      "name": "Update Low Path",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/hr-recruiting-candidate-sync-to-spreadsheet/route-low",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a07eb428-a40c-501b-af69-c3dd3ec366fd",
+      "name": "Merge Paths",
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {
+        "mode": "append"
+      }
+    },
+    {
+      "id": "dbcb5692-9628-50ee-8aa1-c5af01853b4c",
+      "name": "Respond Done",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        1560,
+        300
+      ],
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "{\"status\": \"scored\"}",
+        "options": {}
+      }
+    }
+  ],
+  "connections": {
+    "Score Webhook": {
+      "main": [
+        [
+          {
+            "node": "Enrich From Source",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Enrich From Source": {
+      "main": [
+        [
+          {
+            "node": "Score Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Score Record": {
+      "main": [
+        [
+          {
+            "node": "High Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "High Score": {
+      "main": [
+        [
+          {
+            "node": "Update High Path",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Update Low Path",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update High Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Update Low Path": {
+      "main": [
+        [
+          {
+            "node": "Merge Paths",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "Merge Paths": {
+      "main": [
+        [
+          {
+            "node": "Respond Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:hr-recruiting"
+    },
+    {
+      "name": "pattern:webhook-enrich-score-branch"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "hr-recruiting",
+    "templatePattern": "webhook-enrich-score-branch"
+  },
+  "versionId": "ff0c9d0a-b4e0-5dd8-b82c-75c623566859",
+  "id": "b6ecd5f5-b9c0-566f-9e30-c34aec0276ac"
+}

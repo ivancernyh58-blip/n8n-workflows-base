@@ -1,0 +1,189 @@
+{
+  "name": "Release Notes Broadcast (Template)",
+  "nodes": [
+    {
+      "id": "f635244f-4f8c-5a47-a420-04cd76ffa867",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "94f8e9ac-23c5-5882-8a2c-aa7cf1275d64",
+      "name": "Sample Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "subject",
+              "value": "Release Notes Broadcast"
+            },
+            {
+              "name": "ref",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "e920c4b1-645d-57e6-b369-f865f2ebb2e8",
+      "name": "Lookup External",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/saas-ops-release-notes-broadcast/lookup",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "55c8c46c-0adc-53ba-b492-c1df990f6db7",
+      "name": "Transform Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Transform lookup result for Release Notes Broadcast.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "ae2bd7c4-b11e-53e5-bf1f-7c0b387e7f7a",
+      "name": "Store Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/saas-ops-release-notes-broadcast/store",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "94bfacdc-d397-507b-bade-9c2c57a54d44",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Input": {
+      "main": [
+        [
+          {
+            "node": "Lookup External",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup External": {
+      "main": [
+        [
+          {
+            "node": "Transform Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Payload": {
+      "main": [
+        [
+          {
+            "node": "Store Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Record": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:saas-ops"
+    },
+    {
+      "name": "pattern:manual-sample-transform-store"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "saas-ops",
+    "templatePattern": "manual-sample-transform-store"
+  },
+  "versionId": "ed2f4da0-0a1b-52ee-9d09-f0c1698d380b",
+  "id": "41e3dd39-714e-5d5c-9221-f9422440550d"
+}

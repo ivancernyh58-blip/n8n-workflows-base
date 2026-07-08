@@ -1,0 +1,188 @@
+{
+  "name": "Payer Eligibility Lookup (Template)",
+  "nodes": [
+    {
+      "id": "ddb6ea97-67d1-5d46-95ad-a0bd4d77a245",
+      "name": "Daily Schedule",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "hours",
+              "hoursInterval": 1
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8baa035f-2542-51a7-a1b8-8dda1d78561b",
+      "name": "List Items",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/healthcare-admin-payer-eligibility-lookup/list",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "97827a33-9dcc-5529-a76a-1855778e0786",
+      "name": "Filter And Format",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Filter and format digest for Payer Eligibility Lookup.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "7497d038-830d-5c4d-bfe2-459575db2672",
+      "name": "Non Empty",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{$json[\"items\"]}}",
+              "operation": "isNotEmpty"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "43e1a507-fa87-5140-bb95-170eb3d04ba7",
+      "name": "Send Digest",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        200
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/healthcare-admin-payer-eligibility-lookup/send-digest",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "5d178cab-d03a-5b4c-8915-49b074ed947f",
+      "name": "Nothing To Send",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        420
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Daily Schedule": {
+      "main": [
+        [
+          {
+            "node": "List Items",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "List Items": {
+      "main": [
+        [
+          {
+            "node": "Filter And Format",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter And Format": {
+      "main": [
+        [
+          {
+            "node": "Non Empty",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Non Empty": {
+      "main": [
+        [
+          {
+            "node": "Send Digest",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Nothing To Send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:healthcare-admin"
+    },
+    {
+      "name": "pattern:schedule-digest-format"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "healthcare-admin",
+    "templatePattern": "schedule-digest-format"
+  },
+  "versionId": "6919addc-39ab-5cdd-86ac-90b47bd59734",
+  "id": "61f17ee8-100b-5885-b037-076fe65709b2"
+}

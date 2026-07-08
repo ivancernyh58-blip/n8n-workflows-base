@@ -1,0 +1,189 @@
+{
+  "name": "Policy Update Broadcast (Template)",
+  "nodes": [
+    {
+      "id": "77385266-f48f-59a2-ac8d-49a01aa243a5",
+      "name": "Manual Trigger",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c57fa294-b3bc-53ea-a047-104899f09143",
+      "name": "Sample Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 1,
+      "position": [
+        460,
+        300
+      ],
+      "parameters": {
+        "keepOnlySet": false,
+        "values": {
+          "string": [
+            {
+              "name": "subject",
+              "value": "Policy Update Broadcast"
+            },
+            {
+              "name": "ref",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "ff11aa73-99be-558d-957d-9636ceffe34e",
+      "name": "Lookup External",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://api.example.com/internal-tools-policy-update-broadcast/lookup",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": false,
+        "bodyParameters": {}
+      }
+    },
+    {
+      "id": "7e6c57dd-28fc-55eb-ae8e-384dbb7d023f",
+      "name": "Transform Payload",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 1,
+      "position": [
+        900,
+        300
+      ],
+      "parameters": {
+        "jsCode": "// Transform lookup result for Policy Update Broadcast.\nconst items = $input.all();\nreturn items.map((it) => ({ json: { ...it.json, processed: true } }));\n",
+        "mode": "runOnceForAllItems"
+      }
+    },
+    {
+      "id": "636838a7-515e-5134-b2b1-cbf4472c6c75",
+      "name": "Store Record",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1120,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.example.com/internal-tools-policy-update-broadcast/store",
+        "authentication": "genericCredentialType",
+        "options": {},
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "placeholder",
+              "value": "REPLACE_WITH_YOUR_VALUE"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "2054ff5f-ce42-53b4-a43a-9a441881e086",
+      "name": "Done",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        300
+      ],
+      "parameters": {}
+    }
+  ],
+  "connections": {
+    "Manual Trigger": {
+      "main": [
+        [
+          {
+            "node": "Sample Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Sample Input": {
+      "main": [
+        [
+          {
+            "node": "Lookup External",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup External": {
+      "main": [
+        [
+          {
+            "node": "Transform Payload",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Transform Payload": {
+      "main": [
+        [
+          {
+            "node": "Store Record",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Store Record": {
+      "main": [
+        [
+          {
+            "node": "Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "active": false,
+  "tags": [
+    {
+      "name": "category:internal-tools"
+    },
+    {
+      "name": "pattern:manual-sample-transform-store"
+    },
+    {
+      "name": "expansion-pack-v0"
+    }
+  ],
+  "meta": {
+    "templateGenerator": "open-workflow-library-expansion-pack-v0",
+    "templateCategory": "internal-tools",
+    "templatePattern": "manual-sample-transform-store"
+  },
+  "versionId": "f4e24ecb-06ba-581e-9a15-138dcc9fb33f",
+  "id": "378691e4-8348-5fe4-bbe5-65b258beff4c"
+}

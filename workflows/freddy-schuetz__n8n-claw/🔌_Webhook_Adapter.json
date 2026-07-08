@@ -1,0 +1,756 @@
+{
+  "name": "🔌 Webhook Adapter",
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "connections": {
+    "Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Map Generic Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Slack Trigger": {
+      "main": [
+        [
+          {
+            "node": "Map Slack Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Teams Trigger": {
+      "main": [
+        [
+          {
+            "node": "Map Teams Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Generic Input": {
+      "main": [
+        [
+          {
+            "node": "Call n8n-claw Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Slack Input": {
+      "main": [
+        [
+          {
+            "node": "Call n8n-claw Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Teams Input": {
+      "main": [
+        [
+          {
+            "node": "Call n8n-claw Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call n8n-claw Agent": {
+      "main": [
+        [
+          {
+            "node": "Route Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Response": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Slack Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Teams Reply",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Respond to Paperclip",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Post Paperclip Comment",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Discord Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Post Paperclip Comment": {
+      "main": [
+        [
+          {
+            "node": "Mark Issue Done",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Custom Webhook Trigger": {
+      "main": [
+        [
+          {
+            "node": "Map Custom Input",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Map Custom Input": {
+      "main": [
+        [
+          {
+            "node": "Call n8n-claw Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "adapter",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "adapter-webhook-trigger",
+      "name": "Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        0
+      ],
+      "webhookId": "webhook-adapter-api",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Webhook Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "events": [
+          "message"
+        ]
+      },
+      "id": "adapter-slack-trigger",
+      "name": "Slack Trigger",
+      "type": "n8n-nodes-base.slackTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        -300
+      ],
+      "disabled": true,
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {},
+      "id": "adapter-teams-trigger",
+      "name": "Teams Trigger",
+      "type": "n8n-nodes-base.microsoftTeamsTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        300
+      ],
+      "disabled": true,
+      "credentials": {
+        "microsoftTeamsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Microsoft Teams"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// Map Generic / Paperclip input to n8n-claw Agent format\n// Paperclip sends: { source, agentId, runId, context: { issueId, taskId, wakeReason, ... } }\n// Generic sends:   { message, user_id, session_id, source, metadata }\nconst body = $json.body || $json;\n\n// ── Paperclip detection: has runId + context (no message field) ──\nconst isPaperclip = !!(body.runId && body.context);\nif (isPaperclip) {\n  const ctx = body.context || {};\n  const issueId = ctx.issueId || ctx.taskId || '';\n  const agentId = body.agentId || 'unknown';\n  const wakeReason = ctx.wakeReason || 'unknown';\n\n  // Fetch issue title+description from Paperclip API\n  // Container DNS name 'paperclip:3100' (same Docker network)\n  // Replace PAPERCLIP_KEY with your Agent API Key from Paperclip\n  const PAPERCLIP_URL = '{{PAPERCLIP_INTERNAL_URL}}';\n  const PAPERCLIP_KEY = '{{PAPERCLIP_AGENT_KEY}}';\n  let message = `[Paperclip] Task (${wakeReason})`;\n  if (issueId && PAPERCLIP_KEY && !PAPERCLIP_KEY.startsWith('{{')) {\n    try {\n      const issue = await this.helpers.httpRequest({\n        method: 'GET',\n        url: `${PAPERCLIP_URL}/api/issues/${issueId}`,\n        headers: { 'Authorization': `Bearer ${PAPERCLIP_KEY}` },\n        returnFullResponse: true\n      });\n      const data = typeof issue === 'string' ? JSON.parse(issue) : (issue.body ? (typeof issue.body === 'string' ? JSON.parse(issue.body) : issue.body) : issue);\n      const title = data.title || '';\n      const desc = data.description || '';\n      if (title) message = desc ? `${title}\\n\\n${desc}` : title;\n    } catch(e) {\n      message += ` — Issue: ${issueId}`;\n    }\n  } else if (issueId) {\n    message += ` — Issue: ${issueId}`;\n  }\n\n  return [{ json: {\n    message,\n    user_id: `paperclip:${agentId}`,\n    session_id: `paperclip:${agentId}`,\n    source: 'paperclip',\n    metadata: {\n      _responseChannel: 'paperclip',\n      runId: body.runId,\n      issueId,\n      wakeReason,\n      paperclipContext: ctx\n    }\n  } }];\n}\n\n// ── Generic / other webhook input ──\nconst message = body.message || body.text || '';\nconst userId = body.user_id || body.name || 'anonymous';\nconst sessionId = body.session_id\n  || (body.agentId ? `paperclip:${body.agentId}` : `api:${userId}`);\nconst source = body.source || (body.agentId ? 'paperclip' : 'api');\n\nreturn [{ json: {\n  message,\n  user_id: userId,\n  session_id: sessionId,\n  source,\n  metadata: {\n    _responseChannel: 'webhook',\n    ...(body.metadata || {}),\n    ...(body.timeoutSeconds ? { timeoutSeconds: body.timeoutSeconds } : {})\n  }\n} }];"
+      },
+      "id": "map-generic-input",
+      "name": "Map Generic Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Map Slack event to n8n-claw Agent format\n// n8n Slack Trigger outputs flat: { type, text, user, channel, ts, ... }\n\n// Skip bot messages to prevent feedback loops\nif ($json.bot_id || $json.subtype === 'bot_message' || $json.subtype === 'channel_join') {\n  return [];\n}\n\nreturn [{ json: {\n  message: $json.text || '',\n  user_id: $json.user || 'unknown',\n  session_id: `slack:${$json.channel}`,\n  source: 'slack',\n  metadata: {\n    _responseChannel: 'slack',\n    channelId: $json.channel,\n    threadTs: $json.thread_ts || $json.ts\n  }\n} }];"
+      },
+      "id": "map-slack-input",
+      "name": "Map Slack Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        -300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// Map Teams Bot Framework Activity to n8n-claw Agent format\n// Teams sends: { type, text, from: { id, name }, conversation: { id } }\nreturn [{ json: {\n  message: $json.text || '',\n  user_id: $json.from?.id || 'unknown',\n  session_id: `teams:${$json.conversation?.id || 'unknown'}`,\n  source: 'teams',\n  metadata: {\n    _responseChannel: 'teams',\n    conversationId: $json.conversation?.id,\n    serviceUrl: $json.serviceUrl,\n    fromName: $json.from?.name\n  }\n} }];"
+      },
+      "id": "map-teams-input",
+      "name": "Map Teams Input",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        400,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{  '{{N8N_URL}}' + '/webhook/agent' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "X-API-Key",
+              "value": "{{WEBHOOK_SECRET}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 120000
+        }
+      },
+      "id": "call-agent",
+      "name": "Call n8n-claw Agent",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        800,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.metadata?._responseChannel }}",
+                    "rightValue": "webhook",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Webhook"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.metadata?._responseChannel }}",
+                    "rightValue": "slack",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Slack"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.metadata?._responseChannel }}",
+                    "rightValue": "teams",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Teams"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.metadata?._responseChannel }}",
+                    "rightValue": "paperclip",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Paperclip"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict"
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.metadata?._responseChannel }}",
+                    "rightValue": "discord",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Discord"
+            }
+          ]
+        },
+        "options": {
+          "fallbackOutput": "extra"
+        }
+      },
+      "id": "route-response",
+      "name": "Route Response",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1200,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-to-webhook",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        0
+      ]
+    },
+    {
+      "parameters": {
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.metadata?.channelId }}"
+        },
+        "text": "={{ $json.response }}",
+        "otherOptions": {
+          "includeLinkToWorkflow": false
+        }
+      },
+      "id": "slack-reply",
+      "name": "Slack Reply",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [
+        1600,
+        -300
+      ],
+      "disabled": true,
+      "credentials": {
+        "slackApi": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "chatMessage",
+        "chatId": "={{ $json.metadata?.conversationId }}",
+        "message": "={{ $json.response }}",
+        "contentType": "text"
+      },
+      "id": "teams-reply",
+      "name": "Teams Reply",
+      "type": "n8n-nodes-base.microsoftTeams",
+      "typeVersion": 2,
+      "position": [
+        1600,
+        300
+      ],
+      "disabled": true,
+      "credentials": {
+        "microsoftTeamsOAuth2Api": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Microsoft Teams"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ $json }}",
+        "options": {
+          "responseCode": 200
+        }
+      },
+      "id": "respond-to-paperclip",
+      "name": "Respond to Paperclip",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1600,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{ '{{PAPERCLIP_INTERNAL_URL}}' + '/api/issues/' + $json.metadata?.issueId + '/comments' }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{PAPERCLIP_AGENT_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ body: $json.response }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "post-paperclip-comment",
+      "name": "Post Paperclip Comment",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2000,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "method": "PATCH",
+        "url": "={{ '{{PAPERCLIP_INTERNAL_URL}}' + '/api/issues/' + $json.issueId }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer {{PAPERCLIP_AGENT_KEY}}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ status: 'done' }) }}",
+        "options": {
+          "timeout": 10000
+        }
+      },
+      "id": "mark-issue-done",
+      "name": "Mark Issue Done",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2400,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 🔌 Webhook Adapter — Getting Started\n\nThis workflow connects external systems to your n8n-claw agent.\n\n**How it works:**\n1. A trigger receives a message from an external system\n2. A mapper translates it to n8n-claw's webhook format\n3. The agent processes it and returns a response\n4. The response is routed back to the original system\n\n**Active by default:** Generic Webhook (POST /webhook/adapter)\n**Disabled by default:** Slack, Teams (enable + add credentials to use)\n\n**To add a new integration:**\n1. Add a new Trigger node\n2. Add a new Map node (copy an existing one)\n3. Set `_responseChannel` in metadata to a unique name\n4. Add a response output in the Route Response switch\n5. Add a reply node for your system",
+        "width": 400,
+        "height": 320
+      },
+      "id": "sticky-getting-started",
+      "name": "Getting Started",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        -200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Slack Setup\n\n1. Create a Slack App at api.slack.com/apps\n2. Add Bot Token Scopes: `chat:write`, `channels:history`, `channels:read`\n3. Install to workspace, copy Bot Token\n4. In n8n: Create Slack OAuth2 credential with the token\n5. Enable the Slack Trigger + Slack Reply nodes\n6. Activate this workflow",
+        "width": 300,
+        "height": 220
+      },
+      "id": "sticky-slack-setup",
+      "name": "Slack Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        -500
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Teams Setup\n\n1. Register a Bot in Azure Portal (Bot Framework)\n2. Create App ID + Client Secret\n3. Set Messaging Endpoint to this workflow's Teams Trigger URL\n4. In n8n: Create Microsoft Teams OAuth2 credential\n5. Enable the Teams Trigger + Teams Reply nodes\n6. Activate this workflow",
+        "width": 300,
+        "height": 220
+      },
+      "id": "sticky-teams-setup",
+      "name": "Teams Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        200
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Paperclip Setup\n\nPaperclip payloads are auto-detected — no extra trigger needed.\n\n1. Deploy Paperclip on same server/network\n2. Create Agent with `http` adapter pointing to `/webhook/adapter`\n3. Set `X-API-Key` header to your `WEBHOOK_SECRET`\n4. Generate an Agent API Key in Paperclip\n5. Set `{{PAPERCLIP_INTERNAL_URL}}` and `{{PAPERCLIP_AGENT_KEY}}` placeholders\n\n**Response flow:**\nAgent response → Comment on Issue → Issue set to Done",
+        "width": 300,
+        "height": 260
+      },
+      "id": "sticky-paperclip-setup",
+      "name": "Paperclip Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        480
+      ]
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "custom",
+        "authentication": "headerAuth",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "custom-webhook-trigger",
+      "name": "Custom Webhook Trigger",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        900
+      ],
+      "webhookId": "webhook-custom-api",
+      "credentials": {
+        "httpHeaderAuth": {
+          "id": "REPLACE_WITH_YOUR_CREDENTIAL_ID",
+          "name": "Webhook Auth"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "manual",
+        "duplicateItem": false,
+        "assignments": {
+          "assignments": [
+            {
+              "id": "field-message",
+              "name": "message",
+              "value": "={{ $json.body.message }}",
+              "type": "string"
+            },
+            {
+              "id": "field-user-id",
+              "name": "user_id",
+              "value": "={{ $json.body.user_id || 'anonymous' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-session-id",
+              "name": "session_id",
+              "value": "={{ $json.body.session_id || 'custom:' + ($json.body.user_id || 'anonymous') }}",
+              "type": "string"
+            },
+            {
+              "id": "field-source",
+              "name": "source",
+              "value": "={{ $json.body.source || 'custom' }}",
+              "type": "string"
+            },
+            {
+              "id": "field-metadata",
+              "name": "metadata",
+              "value": "={{ { _responseChannel: 'webhook' } }}",
+              "type": "object"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "map-custom-input",
+      "name": "Map Custom Input",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        400,
+        900
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## 🛠️ Custom App Setup\n\nThis path is for your own integrations.\nEndpoint: `POST /webhook/custom`\n\n**How to:**\n1. Open the **Map Custom Input** Set node\n2. Adjust the fields to match your app:\n   - `message` → The field containing the text\n   - `user_id` → The sender identifier\n   - `session_id` → Unique conversation ID\n   - `source` → Your app's name\n3. Send a POST with `X-API-Key` header\n\n**Example:** Your app sends `{ \"text\": \"Hello\", \"username\": \"bob\" }`\n→ Change `$json.body.message` to `$json.body.text`\n→ Change `$json.body.user_id` to `$json.body.username`",
+        "width": 400,
+        "height": 380
+      },
+      "id": "sticky-custom-setup",
+      "name": "Custom App Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        800
+      ]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "http://discord-bridge:3300/reply",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"channelId\": \"{{ $json.metadata?.channelId }}\",\n  \"content\": {{ JSON.stringify($json.response || $json.message || \"\") }}\n}",
+        "options": {
+          "response": {
+            "response": {
+              "neverError": true
+            }
+          }
+        }
+      },
+      "id": "discord-reply",
+      "name": "Discord Reply",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1600,
+        -600
+      ]
+    },
+    {
+      "parameters": {
+        "content": "## Discord Setup\n\nDiscord uses a small bot-sidecar container (`discord-bridge`). Opt in during `./setup.sh` when asked for a bot token — the container is only built and started if you enable it.\n\n**Get a bot token:**\n1. discord.com/developers/applications → New Application\n2. Add a Bot, enable **Message Content Intent**\n3. Copy the token, paste it during setup.sh\n4. Invite the bot with `bot` + `applications.commands` scopes\n\n**How it works:**\n- Sidecar subscribes to Discord Gateway\n- On each channel message it POSTs to this workflow's Webhook Trigger\n- Route Response → Discord Reply sends the agent's reply back via the same bot\n\nNo Discord credential in n8n — the bot token lives only in the sidecar.",
+        "height": 320,
+        "width": 340
+      },
+      "id": "sticky-discord-setup",
+      "name": "Discord Setup",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        -500,
+        -800
+      ]
+    }
+  ]
+}
