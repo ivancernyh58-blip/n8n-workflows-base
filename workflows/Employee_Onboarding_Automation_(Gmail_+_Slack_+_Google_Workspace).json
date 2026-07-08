@@ -1,0 +1,304 @@
+{
+  "name": "Employee Onboarding Automation (Gmail + Slack + Google Workspace)",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        -416,
+        -16
+      ],
+      "id": "f39e7e68-11ed-485f-be7d-61ceab3f967e",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12DInpOpPvd7JOTwTsp2tIGm_jL84Yzzli-9LWzVDi74",
+          "mode": "list",
+          "cachedResultName": "dummy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12DInpOpPvd7JOTwTsp2tIGm_jL84Yzzli-9LWzVDi74/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12DInpOpPvd7JOTwTsp2tIGm_jL84Yzzli-9LWzVDi74/edit#gid=0"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        -176,
+        -16
+      ],
+      "id": "dd12f2f2-d1fc-478f-9e3e-55888a91017a",
+      "name": "Get row(s) in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pmNCWLmfyqEVUyPq",
+          "name": "Google Sheets account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $('Get row(s) in sheet').item.json.Email }}",
+        "subject": "Welcome to Our Community!",
+        "emailType": "text",
+        "message": "={{ $('Get row(s) in sheet').item.json[\"Welcome Message\"] }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        112,
+        -16
+      ],
+      "id": "87669639-5057-456b-a48e-e37517e58b07",
+      "name": "Send a message",
+      "webhookId": "0062d80f-f65a-4fb9-ae4a-f9351e4bf810",
+      "executeOnce": false,
+      "retryOnFail": true,
+      "maxTries": 2,
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "x6ps1D1lGwlqULdC",
+          "name": "Gmail account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C09G6DPVBJ9",
+          "mode": "list",
+          "cachedResultName": "dummy"
+        },
+        "text": "=🎉 New employee joined!  \nName: {{ $json[\"Full Name\"] }}  \nWelcome to our community! 👋",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.3,
+      "position": [
+        112,
+        176
+      ],
+      "id": "90703afc-9c0d-4864-9005-cdcf9c8d5667",
+      "name": "Send a message1",
+      "webhookId": "a2dedba9-b724-4708-b21b-ae0368012b98",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "1LrUVmBIQIRN3dyF",
+          "name": "Slack account 3"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "folder",
+        "name": "={{ $json['Full Name'] }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "root",
+          "cachedResultName": "/ (Root folder)"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        128,
+        -192
+      ],
+      "id": "1f3ea654-2521-4c43-a469-c583f7a042ab",
+      "name": "Create folder",
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "cwgQ8z07lHFRynnB",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "12DInpOpPvd7JOTwTsp2tIGm_jL84Yzzli-9LWzVDi74",
+          "mode": "list",
+          "cachedResultName": "dummy",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12DInpOpPvd7JOTwTsp2tIGm_jL84Yzzli-9LWzVDi74/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "email",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12DInpOpPvd7JOTwTsp2tIGm_jL84Yzzli-9LWzVDi74/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "status": "True",
+            "Email": "={{ $('Get row(s) in sheet').item.json.Email }}"
+          },
+          "matchingColumns": [
+            "Email"
+          ],
+          "schema": [
+            {
+              "id": "Full Name",
+              "displayName": "Full Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Welcome Message",
+              "displayName": "Welcome Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "status",
+              "displayName": "status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        400,
+        64
+      ],
+      "id": "b223a248-5bbe-4681-9863-cbe70bf45f5c",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "pmNCWLmfyqEVUyPq",
+          "name": "Google Sheets account 2"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "Get row(s) in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get row(s) in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Create folder",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create folder": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "63730b60-5023-4c4b-bf7f-6c6535e24f26",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "7fab67108fdc2ea208324604cb6cef31849f0170c8661a6472f586130faa7cd2"
+  },
+  "id": "Jpn1csEllZ3rjmB2",
+  "tags": []
+}
